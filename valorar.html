@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Cuánto vale tu casa? Valoración gratuita | Evolv Real Estate</title>
+<meta name="description" content="Valora tu casa gratis en la Sierra de Madrid. Responde unas preguntas en 3 minutos y recibe una valoración profesional de Evolv Real Estate, sin compromiso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css?v=6">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<style>
+/* ===== Página de valoración ===== */
+.v-hero { background: linear-gradient(180deg, var(--lavanda) 0%, var(--blanco-roto) 100%); padding: 4.5rem 0 4rem; }
+.v-hero-rejilla { display: grid; grid-template-columns: 1.05fr .95fr; gap: 3.5rem; align-items: center; }
+.v-hero h1 { font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1.05; color: var(--morado); font-weight: 800; letter-spacing: -.01em; }
+.v-hero .v-lead { font-size: 1.15rem; color: var(--morado-medio); margin-top: 1rem; max-width: 46ch; }
+.v-buscar { display: flex; gap: .5rem; margin-top: 2rem; background: #fff; padding: .5rem; border-radius: 16px; box-shadow: 0 14px 40px rgba(40,26,57,.12); max-width: 560px; }
+.v-buscar input { flex: 1; border: 0; font: inherit; font-size: 1.02rem; padding: .8rem 1rem; outline: none; color: var(--texto); background: transparent; min-width: 0; }
+.v-buscar .boton { border-radius: 12px; white-space: nowrap; }
+.v-checks { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1.2rem; font-weight: 700; color: var(--morado); font-size: .95rem; }
+.v-checks li { display: flex; align-items: center; gap: .4rem; }
+.v-checks svg { width: 18px; height: 18px; fill: var(--morado); }
+.v-foto { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 4 / 3.4; background: var(--morado) center / cover no-repeat; box-shadow: 0 24px 60px rgba(40,26,57,.18); }
+.v-tarjeta { position: absolute; left: 1.2rem; bottom: 1.2rem; right: 1.2rem; background: rgba(255,255,255,.96); border-radius: 16px; padding: 1.1rem 1.3rem; display: grid; gap: .55rem; backdrop-filter: blur(6px); }
+.v-tarjeta strong { color: var(--morado); font-size: 1.05rem; }
+.v-tarjeta div { display: flex; align-items: center; gap: .55rem; color: var(--morado-medio); font-size: .93rem; font-weight: 500; }
+.v-tarjeta svg { width: 18px; height: 18px; fill: var(--morado); flex: none; }
+
+.v-pasos-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; counter-reset: paso; }
+.v-paso-info { background: #fff; border-radius: 18px; padding: 2rem; box-shadow: 0 2px 18px rgba(40,26,57,.06); }
+.v-paso-info::before { counter-increment: paso; content: counter(paso); display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: var(--morado); color: #fff; font-weight: 800; margin-bottom: 1rem; }
+.v-paso-info h3 { color: var(--morado); font-size: 1.25rem; margin-bottom: .4rem; }
+.v-paso-info p { color: var(--morado-medio); }
+
+.v-faq { max-width: 820px; margin: 0 auto; display: grid; gap: .8rem; }
+.v-faq details { background: #fff; border-radius: 14px; padding: 1.1rem 1.4rem; box-shadow: 0 2px 14px rgba(40,26,57,.05); }
+.v-faq summary { font-weight: 800; color: var(--morado); cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.v-faq summary::-webkit-details-marker { display: none; }
+.v-faq summary::after { content: "+"; font-size: 1.4rem; line-height: 1; transition: transform .2s; }
+.v-faq details[open] summary::after { transform: rotate(45deg); }
+.v-faq p { margin-top: .7rem; color: var(--morado-medio); }
+
+/* ===== Asistente paso a paso ===== */
+.v-asistente { display: none; min-height: calc(100vh - 76px); background: var(--blanco-roto); padding: 2.5rem 0 5rem; }
+body.v-modo .v-landing { display: none; }
+body.v-modo .v-asistente { display: block; }
+body.v-modo .pie, body.v-modo .whatsapp { display: none; }
+.v-caja { max-width: 640px; margin: 0 auto; }
+.v-barra-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .8rem; font-weight: 700; color: var(--morado-medio); font-size: .9rem; }
+.v-atras { background: none; border: 0; font: inherit; font-weight: 700; color: var(--morado); cursor: pointer; display: flex; align-items: center; gap: .3rem; padding: .3rem 0; }
+.v-atras svg { width: 18px; height: 18px; fill: currentColor; }
+.v-progreso { height: 6px; background: #ddd8e6; border-radius: 99px; overflow: hidden; margin-bottom: 1.6rem; }
+.v-progreso span { display: block; height: 100%; width: 0; background: var(--morado); border-radius: 99px; transition: width .4s ease; }
+.v-panel { background: #fff; border-radius: 22px; padding: 2.2rem; box-shadow: 0 10px 40px rgba(40,26,57,.08); }
+.v-panel h2 { color: var(--morado); font-size: clamp(1.45rem, 3vw, 1.85rem); line-height: 1.2; }
+.v-panel .v-ayuda { color: var(--morado-medio); margin: .4rem 0 1.5rem; }
+.v-precision { background: var(--lavanda); border-radius: 14px; padding: .9rem 1.1rem; margin-bottom: 1.5rem; }
+.v-precision div { display: flex; justify-content: space-between; font-size: .85rem; font-weight: 800; color: var(--morado); margin-bottom: .5rem; }
+.v-precision i { display: block; height: 6px; background: rgba(40,26,57,.12); border-radius: 99px; overflow: hidden; }
+.v-precision b { display: block; height: 100%; background: var(--morado); border-radius: 99px; transition: width .5s ease; }
+.v-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.v-opciones.una { grid-template-columns: 1fr; }
+.v-opcion { display: flex; align-items: center; gap: .8rem; text-align: left; padding: 1rem 1.1rem; border-radius: 14px; border: 2px solid #e4e0ec; background: #fff; font: inherit; font-weight: 700; color: var(--morado); cursor: pointer; transition: border-color .2s, background .2s, transform .15s; }
+.v-opcion:hover { border-color: var(--morado-medio); }
+.v-opcion.activa { border-color: var(--morado); background: #f4f1f9; }
+.v-opcion .v-ic { width: 40px; height: 40px; border-radius: 10px; background: var(--lavanda); display: grid; place-items: center; flex: none; }
+.v-opcion .v-ic svg { width: 22px; height: 22px; fill: var(--morado); }
+.v-opcion small { display: block; font-weight: 500; color: var(--morado-medio); font-size: .85rem; }
+.v-chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+.v-chip { padding: .65rem 1.1rem; border-radius: 99px; border: 2px solid #e4e0ec; background: #fff; font: inherit; font-weight: 700; color: var(--morado); cursor: pointer; transition: .2s; }
+.v-chip.activa { background: var(--morado); border-color: var(--morado); color: #fff; }
+.v-sub { margin-top: 1.4rem; }
+.v-sub > label, .v-campo > label { display: block; font-weight: 800; color: var(--morado); font-size: .92rem; margin-bottom: .5rem; }
+.v-campo { margin-bottom: 1.1rem; }
+.v-campo input, .v-campo select, .v-campo textarea { width: 100%; padding: .9rem 1rem; border-radius: 12px; border: 2px solid #e4e0ec; font: inherit; font-size: 1rem; color: var(--texto); background: #fff; outline: none; transition: border-color .2s; }
+.v-campo input:focus, .v-campo select:focus, .v-campo textarea:focus { border-color: var(--morado); }
+.v-campo textarea { min-height: 90px; resize: vertical; }
+.v-unidad { position: relative; }
+.v-unidad span { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--morado-medio); font-weight: 700; pointer-events: none; }
+.v-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.v-contador { display: flex; align-items: center; justify-content: space-between; padding: .9rem 1.1rem; border: 2px solid #e4e0ec; border-radius: 14px; margin-bottom: .8rem; }
+.v-contador strong { color: var(--morado); }
+.v-contador div { display: flex; align-items: center; gap: .9rem; }
+.v-contador button { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #e4e0ec; background: #fff; font-size: 1.3rem; font-weight: 700; color: var(--morado); cursor: pointer; line-height: 1; }
+.v-contador button:hover { border-color: var(--morado); }
+.v-contador output { min-width: 2ch; text-align: center; font-weight: 800; font-size: 1.15rem; color: var(--morado); }
+.v-acciones { display: flex; justify-content: flex-end; margin-top: 1.6rem; }
+.v-acciones .boton:disabled { opacity: .35; cursor: not-allowed; }
+.v-error { color: #a3192e; font-weight: 700; font-size: .9rem; margin-top: .6rem; display: none; }
+.v-error.visible { display: block; }
+.v-legal { font-size: .85rem; color: var(--morado-medio); display: flex; gap: .55rem; align-items: flex-start; margin-top: .4rem; }
+.v-legal input { width: auto; margin-top: .25rem; }
+.v-gracias { text-align: center; padding: 1rem 0; }
+.v-gracias .v-ok { width: 74px; height: 74px; border-radius: 50%; background: var(--morado); display: grid; place-items: center; margin: 0 auto 1.4rem; }
+.v-gracias .v-ok svg { width: 38px; height: 38px; fill: #fff; }
+.v-gracias p { color: var(--morado-medio); margin: .8rem auto 1.6rem; max-width: 44ch; }
+.v-gracias .v-botones { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+.v-resumen { background: var(--blanco-roto); border-radius: 14px; padding: 1rem 1.2rem; text-align: left; margin: 0 auto 1.6rem; max-width: 420px; font-size: .93rem; color: var(--morado-medio); }
+.v-resumen b { color: var(--morado); }
+.v-paso { animation: v-entrar .35s ease; }
+@keyframes v-entrar { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 900px) {
+  .v-hero-rejilla { grid-template-columns: 1fr; gap: 2.5rem; }
+  .v-pasos-info { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .v-hero { padding: 3rem 0; }
+  .v-buscar { flex-direction: column; }
+  .v-buscar .boton { width: 100%; }
+  .v-panel { padding: 1.5rem 1.2rem; border-radius: 18px; }
+  .v-opciones, .v-dos { grid-template-columns: 1fr; }
+  .v-acciones .boton { width: 100%; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { .v-paso { animation: none; } }
+</style>
+</head>
+<body>
+
+<!-- ================= Página de presentación ================= -->
+<main class="v-landing">
+  <section class="v-hero">
+    <div class="contenedor v-hero-rejilla">
+      <div>
+        <p class="h-eyebrow oscuro">Valoración gratuita · Sierra de Madrid</p>
+        <h1>¿Cuánto vale tu casa?</h1>
+        <p class="v-lead">Responde unas preguntas sobre tu vivienda y te enviamos una valoración profesional, hecha por quien conoce el mercado de la sierra.</p>
+        <form class="v-buscar" id="v-inicio">
+          <input id="v-dir-inicio" type="text" placeholder="Dirección o pueblo de tu vivienda" autocomplete="street-address" aria-label="Dirección de tu vivienda">
+          <button class="boton" type="submit">Valorar mi casa</button>
+        </form>
+        <ul class="v-checks">
+          <li><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>3 minutos</li>
+          <li><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>100 % gratis</li>
+          <li><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Sin compromiso</li>
+        </ul>
+      </div>
+      <div class="v-foto" id="v-foto">
+        <div class="v-tarjeta">
+          <strong>Tu valoración con Evolv</strong>
+          <div><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3z"/></svg>Respuesta en 24–48 horas</div>
+          <div><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7zm0 4.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>Basada en ventas reales de tu zona</div>
+          <div><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v3h16v-3c0-2.8-3.6-5-8-5z"/></svg>Un asesor real, no un algoritmo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="h-cabecera centrada aparecer"><p class="h-eyebrow oscuro">Cómo funciona</p><h2 class="titulo">Tu valoración en tres pasos</h2></div>
+      <div class="v-pasos-info">
+        <div class="v-paso-info aparecer"><h3>Cuéntanos tu casa</h3><p>Ubicación, superficie, habitaciones y extras. Solo te llevará unos minutos.</p></div>
+        <div class="v-paso-info aparecer"><h3>La estudiamos</h3><p>Comparamos tu vivienda con las operaciones recientes y la demanda real de tu pueblo.</p></div>
+        <div class="v-paso-info aparecer"><h3>Recibe tu valoración</h3><p>Te contactamos con un precio de mercado realista y, si quieres, te explicamos cómo venderla.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion lavanda">
+    <div class="contenedor">
+      <div class="h-cabecera centrada aparecer"><p class="h-eyebrow oscuro">Preguntas frecuentes</p><h2 class="titulo">Lo que suelen preguntarnos</h2></div>
+      <div class="v-faq">
+        <details><summary>¿La valoración es realmente gratis?</summary><p>Sí. No tiene coste ni te compromete a nada. Es nuestra forma de conocerte y de ayudarte a tomar una buena decisión.</p></details>
+        <details><summary>¿En cuánto tiempo la recibo?</summary><p>Normalmente en 24–48 horas. Si necesitamos algún dato más, te llamamos antes para no hacerte perder el tiempo.</p></details>
+        <details><summary>¿Cómo calculáis el precio?</summary><p>Con nuestro conocimiento del mercado de la sierra: ventas recientes de viviendas parecidas, la demanda actual de tu zona y las características concretas de tu casa.</p></details>
+        <details><summary>¿Tengo que vender con vosotros después?</summary><p>No. Puedes usar la valoración como quieras. Si decides vender o alquilar, estaremos encantados de ayudarte.</p></details>
+        <details><summary>¿Qué hacéis con mis datos?</summary><p>Solo los usamos para preparar tu valoración y contactarte. No los compartimos con nadie. Más información en nuestra <a href="privacidad.html">política de privacidad</a>.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="h-cta">
+    <div class="contenedor h-cta-dentro aparecer">
+      <div>
+        <h2>Descubre lo que vale tu casa hoy</h2>
+        <p>Tres minutos, gratis y sin compromiso.</p>
+      </div>
+      <div class="h-cta-botones">
+        <button class="boton claro" type="button" id="v-empezar-2">Empezar la valoración</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= Asistente paso a paso ================= -->
+<section class="v-asistente" aria-live="polite">
+  <div class="contenedor v-caja">
+    <div class="v-barra-top">
+      <button class="v-atras" type="button" id="v-atras"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></svg>Atrás</button>
+      <span id="v-contador-pasos"></span>
+    </div>
+    <div class="v-progreso"><span id="v-barra"></span></div>
+    <div class="v-panel" id="v-panel"></div>
+  </div>
+</section>
+
+<script src="/js/datos.js?v=3"></script>
+<script src="/js/main.js?v=4"></script>
+<script>
+(() => {
+  const ICON = {
+    piso: '<path d="M5 3h14v18h-5v-4h-4v4H5zm3 3v2h2V6zm6 0v2h2V6zm-6 4v2h2v-2zm6 0v2h2v-2zm-6 4v2h2v-2zm6 0v2h2v-2z"/>',
+    casa: '<path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3z"/>',
+    atico: '<path d="M3 21V9l9-6 9 6v12h-6v-6H9v6zm4-9v2h2v-2zm8 0v2h2v-2z"/>',
+    terreno: '<path d="M2 20 9 9l4 6 3-4 6 9zM17 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>',
+    vender: '<path d="M21.4 11.6 12.4 2.6A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7c0 .6.2 1.1.6 1.4l9 9a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0-2.8zM6.5 8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>',
+    alquilar: '<path d="M7 14a3 3 0 1 1 2.8-4H21v3h-2v2h-3v-2H9.8A3 3 0 0 1 7 14zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>',
+    saber: '<path d="M11 18h2v-2h-2zm1-16a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a4 4 0 0 1 4 4c0 2.5-3 2.8-3 5h-2c0-3.3 3-3.1 3-5a2 2 0 0 0-4 0H8a4 4 0 0 1 4-4z"/>',
+  };
+  const svg = (k) => `<span class="v-ic"><svg viewBox="0 0 24 24">${ICON[k]}</svg></span>`;
+  const MUNICIPIOS = ["Los Molinos", "Guadarrama", "Cercedilla", "Collado Mediano", "Alpedrete", "Moralzarzal", "Becerril de la Sierra", "Navacerrada", "Collado Villalba", "El Escorial", "San Lorenzo de El Escorial", "Otro"];
+  const EXTRAS = ["Piscina", "Jardín", "Garaje", "Terraza", "Trastero", "Chimenea", "Calefacción", "Aire acondicionado", "Ascensor", "Vistas"];
+
+  const D = { hab: 3, banos: 2, extras: [] };
+  const sinCasa = () => D.tipo === "Terreno";
+
+  /* Cada paso: título, ayuda, html, si está completo, y si se salta */
+  const PASOS = [
+    { id: "dir", titulo: "¿Dónde está tu vivienda?", ayuda: "La ubicación es lo que más influye en el precio.",
+      html: () => `
+        <div class="v-campo"><label for="f-dir">Dirección</label><input id="f-dir" type="text" autocomplete="street-address" placeholder="Calle y número" value="${esc(D.dir || "")}"></div>
+        <div class="v-campo"><label for="f-mun">Municipio</label><select id="f-mun"><option value="">Elige tu municipio</option>${MUNICIPIOS.map((m) => `<option ${m === D.mun ? "selected" : ""}>${m}</option>`).join("")}</select></div>`,
+      leer: () => { D.dir = val("#f-dir"); D.mun = val("#f-mun"); },
+      ok: () => D.dir && D.mun },
+    { id: "tipo", titulo: "¿Qué tipo de vivienda es?", ayuda: "Así la comparamos con las ventas más parecidas.",
+      html: () => `
+        <div class="v-opciones">${[["Piso", "piso"], ["Casa o chalet", "casa"], ["Ático o dúplex", "atico"], ["Terreno", "terreno"]].map(([t, i]) => `<button type="button" class="v-opcion ${D.tipo === t ? "activa" : ""}" data-tipo="${t}">${svg(i)}${t}</button>`).join("")}</div>
+        ${D.tipo === "Casa o chalet" ? `<div class="v-sub"><label>¿Qué tipo de casa?</label><div class="v-chips">${["Independiente", "Pareada", "Adosada"].map((s) => `<button type="button" class="v-chip ${D.subtipo === s ? "activa" : ""}" data-subtipo="${s}">${s}</button>`).join("")}</div></div>` : ""}`,
+      ok: () => D.tipo && (D.tipo !== "Casa o chalet" || D.subtipo) },
+    { id: "m2", titulo: "¿Qué tamaño tiene?", ayuda: "Si no lo sabes exacto, pon una cifra aproximada.",
+      html: () => `
+        <div class="v-dos">
+          ${sinCasa() ? "" : `<div class="v-campo"><label for="f-m2">Superficie construida</label><div class="v-unidad"><input id="f-m2" type="number" inputmode="numeric" min="10" max="5000" value="${D.m2 || ""}" placeholder="Ej. 180"><span>m²</span></div></div>`}
+          ${D.tipo === "Piso" || D.tipo === "Ático o dúplex" ? "" : `<div class="v-campo"><label for="f-parcela">Parcela ${sinCasa() ? "" : "(opcional)"}</label><div class="v-unidad"><input id="f-parcela" type="number" inputmode="numeric" min="10" value="${D.parcela || ""}" placeholder="Ej. 600"><span>m²</span></div></div>`}
+        </div>`,
+      leer: () => { D.m2 = num("#f-m2"); D.parcela = num("#f-parcela"); },
+      ok: () => (sinCasa() ? D.parcela > 0 : D.m2 >= 10) },
+    { id: "dist", saltar: sinCasa, titulo: "¿Cómo está distribuida?", ayuda: "Cuenta todos los dormitorios y baños completos.",
+      html: () => `
+        <div class="v-contador"><strong>Habitaciones</strong><div><button type="button" data-cont="hab" data-d="-1" aria-label="Menos habitaciones">−</button><output id="o-hab">${D.hab}</output><button type="button" data-cont="hab" data-d="1" aria-label="Más habitaciones">+</button></div></div>
+        <div class="v-contador"><strong>Baños</strong><div><button type="button" data-cont="banos" data-d="-1" aria-label="Menos baños">−</button><output id="o-banos">${D.banos}</output><button type="button" data-cont="banos" data-d="1" aria-label="Más baños">+</button></div></div>`,
+      ok: () => true },
+    { id: "estado", saltar: sinCasa, titulo: "¿En qué estado está?", ayuda: "Sé sincero: así la valoración será más ajustada.",
+      html: () => `<div class="v-opciones una">${[["A estrenar o reformada", "Reformada hace poco o de obra nueva"], ["Buen estado", "Lista para entrar a vivir"], ["Necesita reforma", "Requiere obras o actualizarse"]].map(([t, s]) => `<button type="button" class="v-opcion ${D.estado === t ? "activa" : ""}" data-estado="${t}"><span>${t}<small>${s}</small></span></button>`).join("")}</div>`,
+      ok: () => !!D.estado },
+    { id: "extras", titulo: "¿Qué extras tiene?", ayuda: "Marca todos los que tenga. Si no tiene ninguno, continúa.",
+      html: () => `<div class="v-chips">${EXTRAS.map((x) => `<button type="button" class="v-chip ${D.extras.includes(x) ? "activa" : ""}" data-extra="${x}">${x}</button>`).join("")}</div>`,
+      ok: () => true },
+    { id: "plan", titulo: "¿Qué te planteas hacer?", ayuda: "Nos ayuda a preparar la información que te será útil.",
+      html: () => `
+        <div class="v-opciones">${[["Vender", "vender"], ["Alquilar", "alquilar"], ["Solo saber su valor", "saber"]].map(([t, i]) => `<button type="button" class="v-opcion ${D.objetivo === t ? "activa" : ""}" data-objetivo="${t}">${svg(i)}${t}</button>`).join("")}</div>
+        ${D.objetivo && D.objetivo !== "Solo saber su valor" ? `<div class="v-sub"><label>¿Para cuándo?</label><div class="v-chips">${["Lo antes posible", "En 3–6 meses", "Más adelante"].map((s) => `<button type="button" class="v-chip ${D.plazo === s ? "activa" : ""}" data-plazo="${s}">${s}</button>`).join("")}</div></div>` : ""}`,
+      ok: () => D.objetivo && (D.objetivo === "Solo saber su valor" || D.plazo) },
+    { id: "contacto", titulo: "¿Dónde te enviamos la valoración?", ayuda: "Te contactaremos en 24–48 horas con el resultado.",
+      html: () => `
+        <div class="v-campo"><label for="f-nombre">Nombre y apellidos</label><input id="f-nombre" type="text" autocomplete="name" value="${esc(D.nombre || "")}"></div>
+        <div class="v-dos">
+          <div class="v-campo"><label for="f-tel">Teléfono</label><input id="f-tel" type="tel" autocomplete="tel" value="${esc(D.tel || "")}"></div>
+          <div class="v-campo"><label for="f-email">Email</label><input id="f-email" type="email" autocomplete="email" value="${esc(D.email || "")}"></div>
+        </div>
+        <div class="v-campo"><label for="f-coment">¿Algo más que debamos saber? (opcional)</label><textarea id="f-coment" placeholder="Orientación, año de construcción, reformas recientes…">${esc(D.coment || "")}</textarea></div>
+        <label class="v-legal"><input type="checkbox" id="f-legal" ${D.legal ? "checked" : ""}> <span>He leído y acepto la <a href="privacidad.html" target="_blank">política de privacidad</a>.</span></label>
+        <p class="v-error" id="v-error"></p>`,
+      leer: () => { D.nombre = val("#f-nombre"); D.tel = val("#f-tel"); D.email = val("#f-email"); D.coment = val("#f-coment"); D.legal = document.querySelector("#f-legal")?.checked; },
+      ok: () => D.nombre && /^[+\d][\d\s-]{7,}$/.test(D.tel || "") && /^\S+@\S+\.\S+$/.test(D.email || "") && D.legal,
+      boton: "Recibir mi valoración" },
+  ];
+
+  const $ = (s) => document.querySelector(s);
+  const val = (s) => ($(s)?.value || "").trim();
+  const num = (s) => { const v = Number($(s)?.value); return v > 0 ? v : null; };
+  const visibles = () => PASOS.filter((p) => !(p.saltar && p.saltar()));
+  let i = 0, enviado = false;
+
+  function pintar() {
+    const lista = visibles();
+    const p = lista[i];
+    const pct = Math.round((i / lista.length) * 100);
+    $("#v-barra").style.width = pct + "%";
+    $("#v-contador-pasos").textContent = `Paso ${i + 1} de ${lista.length}`;
+    const precision = Math.min(95, 20 + Math.round((i / (lista.length - 1)) * 75));
+    $("#v-panel").innerHTML = `<div class="v-paso">
+      <h2>${p.titulo}</h2><p class="v-ayuda">${p.ayuda}</p>
+      ${p.id !== "contacto" ? `<div class="v-precision"><div><span>Precisión de tu valoración</span><span>${precision} %</span></div><i><b style="width:${precision}%"></b></i></div>` : ""}
+      ${p.html()}
+      <div class="v-acciones"><button class="boton" type="button" id="v-siguiente">${p.boton || "Continuar"}</button></div>
+    </div>`;
+    actualizarBoton();
+    const primero = $("#v-panel input, #v-panel select");
+    if (primero && matchMedia("(min-width: 700px)").matches) primero.focus();
+  }
+  function actual() { return visibles()[i]; }
+  function actualizarBoton() { const p = actual(); p.leer && p.leer(); $("#v-siguiente").disabled = !p.ok(); }
+
+  function avanzar() {
+    const p = actual(); p.leer && p.leer();
+    if (!p.ok()) return;
+    if (p.id === "contacto") return enviar();
+    i = Math.min(i + 1, visibles().length - 1);
+    pintar(); scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function atras() {
+    const p = actual(); p.leer && p.leer();
+    if (i === 0) return salir();
+    i--; pintar();
+  }
+  function entrar(dir) {
+    if (dir) D.dir = dir;
+    document.body.classList.add("v-modo");
+    i = 0; pintar(); scrollTo(0, 0);
+    if (location.hash !== "#valorar") history.pushState({ v: 1 }, "", "#valorar");
+  }
+  function salir() { document.body.classList.remove("v-modo"); if (location.hash === "#valorar") history.back(); }
+  addEventListener("popstate", () => { if (location.hash !== "#valorar" && !enviado) document.body.classList.remove("v-modo"); });
+
+  /* Interacciones */
+  $("#v-panel").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    const p = actual();
+    if (b.id === "v-siguiente") return avanzar();
+    if (b.dataset.tipo) { D.tipo = b.dataset.tipo; if (D.tipo !== "Casa o chalet") { D.subtipo = ""; return avanzar(); } return pintar(); }
+    if (b.dataset.subtipo) { D.subtipo = b.dataset.subtipo; return avanzar(); }
+    if (b.dataset.estado) { D.estado = b.dataset.estado; return avanzar(); }
+    if (b.dataset.objetivo) { D.objetivo = b.dataset.objetivo; D.plazo = ""; if (D.objetivo === "Solo saber su valor") return avanzar(); return pintar(); }
+    if (b.dataset.plazo) { D.plazo = b.dataset.plazo; return avanzar(); }
+    if (b.dataset.extra) { const x = b.dataset.extra; D.extras = D.extras.includes(x) ? D.extras.filter((y) => y !== x) : [...D.extras, x]; b.classList.toggle("activa"); return; }
+    if (b.dataset.cont) { const k = b.dataset.cont, max = k === "hab" ? 12 : 8; D[k] = Math.max(k === "hab" ? 0 : 1, Math.min(max, D[k] + Number(b.dataset.d))); $("#o-" + k).textContent = D[k]; return; }
+    if (p) actualizarBoton();
+  });
+  $("#v-panel").addEventListener("input", actualizarBoton);
+  $("#v-panel").addEventListener("change", actualizarBoton);
+  $("#v-panel").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") { e.preventDefault(); avanzar(); } });
+  $("#v-atras").addEventListener("click", atras);
+  $("#v-inicio").addEventListener("submit", (e) => { e.preventDefault(); entrar(val("#v-dir-inicio")); });
+  $("#v-empezar-2").addEventListener("click", () => entrar());
+
+  /* Envío: mismo sistema que el resto de formularios (hoja de Google + aviso por email + panel) */
+  async function enviar() {
+    const b = $("#v-siguiente"), err = $("#v-error");
+    b.disabled = true; b.textContent = "Enviando…"; err.classList.remove("visible");
+    const campos = {
+      Formulario: "Valoración de vivienda",
+      Página: location.pathname,
+      Nombre: D.nombre, Teléfono: D.tel, email: D.email,
+      Dirección: [D.dir, D.mun].filter(Boolean).join(", "),
+      Municipio: D.mun,
+      "Tipo de vivienda": [D.tipo, D.subtipo].filter(Boolean).join(" · "),
+      "Superficie (m²)": D.m2 || "",
+      "Parcela (m²)": D.parcela || "",
+      Habitaciones: sinCasa() ? "" : D.hab,
+      Baños: sinCasa() ? "" : D.banos,
+      "Estado de la vivienda": sinCasa() ? "" : D.estado,
+      Extras: D.extras.join(", "),
+      Objetivo: D.objetivo,
+      Plazo: D.plazo || "",
+      Mensaje: D.coment || "",
+    };
+    try {
+      if (CONFIG.formularioUrl) {
+        const cuerpo = new URLSearchParams();
+        Object.entries(campos).forEach(([k, v]) => { if (v !== "" && v != null) cuerpo.append(k, v); });
+        await fetch(CONFIG.formularioUrl, { method: "POST", mode: "no-cors", body: cuerpo });
+      } else {
+        const r = await fetch(`https://formsubmit.co/ajax/${CONFIG.email}`, {
+          method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ ...campos, _subject: "Valoración de vivienda", _template: "table", _captcha: "false" }),
+        });
+        if (!r.ok) throw new Error();
+      }
+      enviado = true; gracias();
+    } catch {
+      b.disabled = false; b.textContent = "Recibir mi valoración";
+      err.innerHTML = `No se ha podido enviar. Escríbenos por <a href="https://wa.me/${CONFIG.whatsapp}">WhatsApp</a> o a <a href="mailto:${CONFIG.email}">${CONFIG.email}</a>.`;
+      err.classList.add("visible");
+    }
+  }
+  function gracias() {
+    $("#v-barra").style.width = "100%";
+    $("#v-contador-pasos").textContent = "¡Listo!";
+    $("#v-atras").style.visibility = "hidden";
+    const nombre = (D.nombre || "").split(" ")[0];
+    $("#v-panel").innerHTML = `<div class="v-paso v-gracias">
+      <div class="v-ok"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+      <h2>¡Gracias${nombre ? ", " + esc(nombre) : ""}!</h2>
+      <p>Hemos recibido los datos de tu vivienda. Te contactaremos en 24–48 horas con tu valoración.</p>
+      <div class="v-resumen"><b>${esc([D.tipo, D.subtipo].filter(Boolean).join(" · "))}</b> en ${esc(D.mun || "")}<br>
+        ${D.m2 ? D.m2 + " m² construidos" : ""}${D.parcela ? (D.m2 ? " · " : "") + D.parcela + " m² de parcela" : ""}${sinCasa() ? "" : ` · ${D.hab} hab. · ${D.banos} baños`}</div>
+      <div class="v-botones">
+        <a class="boton" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola, acabo de pedir la valoración de mi casa en la web de Evolv.")}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+        <a class="boton boton-borde" href="index.html">Volver al inicio</a>
+      </div>
+    </div>`;
+  }
+
+  listo.then(() => {
+    const foto = IMAGENES.portada || (VENTA[0] && VENTA[0].img);
+    if (foto) $("#v-foto").style.backgroundImage = `url('${foto}')`;
+    if (location.hash === "#valorar") entrar();
+    observarAparicion();
+  });
+})();
+</script>
+</body>
+</html>
