@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="/css/styles.css?v=2">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 </head>
 <body>
@@ -52,12 +52,12 @@
   </section>
 </main>
 
-<script src="js/datos.js"></script>
-<script src="js/main.js"></script>
+<script src="/js/datos.js?v=2"></script>
+<script src="/js/main.js?v=2"></script>
 <script>
-listo.then(() => {
-  if (IMAGENES.portada) document.getElementById("hero").style.backgroundImage = `url('${IMAGENES.portada}')`;
-  if (IMAGENES.comprar) document.getElementById("img-comprar").src = IMAGENES.comprar;
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("hero").style.backgroundImage = `url('${IMAGENES.portada}')`;
+  document.getElementById("img-comprar").src = IMAGENES.comprar;
   if (!TESTIMONIOS.length) { document.getElementById("opiniones").remove(); return; }
   document.getElementById("testimonios").innerHTML = TESTIMONIOS.map(t =>
     `<blockquote>“${t.texto}”</blockquote><cite>${t.autor}</cite>`).join("<br><br>");
