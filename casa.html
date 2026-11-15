@@ -30,7 +30,7 @@ listo.then(() => {
   if (!p) {
     ficha.innerHTML = `<div style="padding:8rem 0;text-align:center"><h1 class="titulo">Este inmueble ya no está disponible</h1>
       <p style="margin-bottom:2rem">Puede que se haya vendido o alquilado.</p>
-      <a class="boton" href="${tipo}.html">Ver otras casas</a></div>`;
+      <a class="boton" href="${tipo === "alquiler" ? "alquilar" : "comprar"}.html">Ver otras casas</a></div>`;
     return;
   }
 
