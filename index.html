@@ -3,64 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Evolv Real Estate | Agencia Inmobiliaria Sierra de Madrid</title>
-<meta name="description" content="Agencia inmobiliaria en la Sierra de Madrid. Compra, alquila o vende casas y chalets con Evolv Real Estate.">
+<title>Evolv Real Estate | Casas y chalets en la Sierra de Madrid</title>
+<meta name="description" content="Agencia inmobiliaria en la Sierra de Madrid. Casas y chalets seleccionados en venta y alquiler en Los Molinos y alrededores. Te acompañamos en la compra, el alquiler o la venta de tu vivienda.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/styles.css?v=3">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css?v=5">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 </head>
-<body>
+<body class="home">
 
 <main>
-  <section class="hero" id="hero">
+  <!-- 1. Portada con buscador -->
+  <section class="h-hero" id="hero">
+    <div class="contenedor h-hero-dentro">
+      <p class="h-eyebrow">Agencia inmobiliaria · Sierra de Madrid</p>
+      <h1>Tu próximo hogar en la Sierra de Madrid</h1>
+      <p class="h-sub">Casas y chalets seleccionados en Los Molinos y alrededores.</p>
+
+      <form class="h-buscador" id="buscador" role="search" aria-label="Buscar casas">
+        <div class="h-tabs" role="tablist">
+          <button type="button" class="activo" data-tipo="venta" role="tab" aria-selected="true">Comprar</button>
+          <button type="button" data-tipo="alquiler" role="tab" aria-selected="false">Alquilar</button>
+        </div>
+        <div class="h-campos">
+          <label class="h-campo"><span>Zona</span>
+            <select id="b-zona"><option value="">Todas las zonas</option></select>
+          </label>
+          <label class="h-campo"><span>Habitaciones</span>
+            <select id="b-hab"><option value="">Cualquiera</option><option value="2">2 o más</option><option value="3">3 o más</option><option value="4">4 o más</option><option value="5">5 o más</option></select>
+          </label>
+          <button class="boton h-buscar" type="submit">Buscar casas</button>
+        </div>
+      </form>
+
+      <ul class="h-confianza">
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Selección exclusiva</li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Atención 24/7</li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>Visitas a tu horario</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2. Casas destacadas -->
+  <section class="seccion" id="destacadas">
     <div class="contenedor">
-      <h1>Tu futuro hogar está aquí</h1>
-      <p>Evolv Real Estate</p>
-      <a href="alquilar.html" class="boton">Alquilar +</a>
-    </div>
-  </section>
-
-  <section class="seccion">
-    <div class="contenedor bloque-doble">
-      <div class="aparecer">
-        <h2 class="titulo">Comprar vivienda</h2>
-        <p>Descubre casas y chalets seleccionados por Evolv Real Estate. Te acompañamos en cada paso para que compres con seguridad y confianza.</p>
-        <a href="comprar.html" class="boton">Comprar +</a>
+      <div class="h-cabecera aparecer">
+        <div><p class="h-eyebrow oscuro">En venta</p><h2 class="titulo">Casas destacadas</h2></div>
+        <a class="h-ver-todo" href="comprar.html">Ver todas las casas en venta →</a>
       </div>
-      <img id="img-comprar" class="aparecer" alt="Casa en la Sierra de Madrid" loading="lazy">
+      <div class="rejilla h-rejilla" id="lista-venta"></div>
     </div>
   </section>
 
+  <!-- 3. ¿Qué necesitas? -->
+  <section class="seccion lavanda">
+    <div class="contenedor">
+      <div class="h-cabecera centrada aparecer"><p class="h-eyebrow oscuro">Cómo te ayudamos</p><h2 class="titulo">¿Qué necesitas?</h2></div>
+      <div class="h-servicios">
+        <a class="h-servicio aparecer" href="comprar.html">
+          <span class="h-icono"><svg viewBox="0 0 24 24"><path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3z"/></svg></span>
+          <h3>Comprar</h3>
+          <p>Te enseñamos casas que encajan contigo y te acompañamos hasta la firma, con seguridad y sin sorpresas.</p>
+          <span class="h-enlace">Ver casas en venta →</span>
+        </a>
+        <a class="h-servicio aparecer" href="alquilar.html">
+          <span class="h-icono"><svg viewBox="0 0 24 24"><path d="M7 14a3 3 0 1 1 2.8-4H21v3h-2v2h-3v-2H9.8A3 3 0 0 1 7 14zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg></span>
+          <h3>Alquilar</h3>
+          <p>Viviendas en alquiler revisadas por nosotros. Organizamos las visitas cuando mejor te venga.</p>
+          <span class="h-enlace">Ver casas en alquiler →</span>
+        </a>
+        <a class="h-servicio destacado aparecer" href="vender.html">
+          <span class="h-icono"><svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4v2h10V7zm0 4v2h10v-2zm0 4v2h7v-2z"/></svg></span>
+          <h3>Vender o alquilar tu casa</h3>
+          <p>Cuéntanos cómo es tu vivienda y nos encargamos de todo: fotos, difusión, visitas y negociación.</p>
+          <span class="h-enlace">Cuéntanos tu propiedad →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Por qué Evolv -->
   <section class="seccion oscura">
-    <div class="contenedor">
-      <h2 class="titulo aparecer">Por qué trabajar con nosotros</h2>
-      <div class="ventajas">
-        <div class="ventaja aparecer"><h3>Exclusivo</h3><p>Ofrecemos propiedades únicas seleccionadas con el máximo detalle para garantizar tu satisfacción.</p></div>
-        <div class="ventaja aparecer"><h3>Disponible</h3><p>Estamos a tu lado siempre que nos necesites, 24/7 para resolver tus dudas.</p></div>
-        <div class="ventaja aparecer"><h3>Flexible</h3><p>Nos adaptamos a tus necesidades y horarios para que encuentres el hogar perfecto sin complicaciones.</p></div>
+    <div class="contenedor h-porque">
+      <div class="aparecer">
+        <p class="h-eyebrow">Por qué Evolv</p>
+        <h2 class="titulo">Una agencia cercana, en la sierra y para la sierra</h2>
+        <p class="h-porque-texto">Conocemos cada pueblo y cada calle. Trabajamos con pocas casas para dedicarle a cada una, y a cada cliente, el tiempo que merece.</p>
+        <a class="boton claro" href="reservar.html">Reservar una visita</a>
+      </div>
+      <div class="h-ventajas">
+        <div class="h-ventaja aparecer"><span class="h-icono claro"><svg viewBox="0 0 24 24"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.4 6.9L12 17.7 5.8 21l1.4-6.9L2 9.3l7-.8z"/></svg></span>
+          <div><h3>Exclusivo</h3><p>Propiedades únicas, seleccionadas con el máximo detalle para garantizar tu satisfacción.</p></div></div>
+        <div class="h-ventaja aparecer"><span class="h-icono claro"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3z"/></svg></span>
+          <div><h3>Disponible</h3><p>Estamos a tu lado siempre que nos necesites, 24/7, para resolver tus dudas.</p></div></div>
+        <div class="h-ventaja aparecer"><span class="h-icono claro"><svg viewBox="0 0 24 24"><path d="M17 3h4v4h-2V5.4l-4.3 4.3-1.4-1.4L17.6 4H17zM3 17h2v1.6l4.3-4.3 1.4 1.4L6.4 20H8v2H3z"/></svg></span>
+          <div><h3>Flexible</h3><p>Nos adaptamos a tus necesidades y horarios para que encuentres tu hogar sin complicaciones.</p></div></div>
       </div>
     </div>
   </section>
 
+  <!-- 5. En alquiler -->
+  <section class="seccion" id="seccion-alquiler">
+    <div class="contenedor">
+      <div class="h-cabecera aparecer">
+        <div><p class="h-eyebrow oscuro">En alquiler</p><h2 class="titulo">Viviendas para alquilar</h2></div>
+        <a class="h-ver-todo" href="alquilar.html">Ver todas las casas en alquiler →</a>
+      </div>
+      <div class="rejilla h-rejilla" id="lista-alquiler"></div>
+    </div>
+  </section>
+
+  <!-- 6. Opiniones -->
   <section class="seccion lavanda" id="opiniones">
-    <div class="contenedor testimonio aparecer">
-      <h2 class="titulo">Qué dicen nuestros clientes</h2>
-      <div id="testimonios"></div>
+    <div class="contenedor">
+      <div class="h-cabecera centrada aparecer"><p class="h-eyebrow oscuro">Opiniones</p><h2 class="titulo">Qué dicen nuestros clientes</h2></div>
+      <div class="h-opiniones" id="testimonios"></div>
+    </div>
+  </section>
+
+  <!-- 7. Llamada final para propietarios -->
+  <section class="h-cta">
+    <div class="contenedor h-cta-dentro aparecer">
+      <div>
+        <h2>¿Tienes una casa para vender o alquilar?</h2>
+        <p>Cuéntanos cómo es y te contactamos para explicarte cómo podemos ayudarte.</p>
+      </div>
+      <div class="h-cta-botones">
+        <a class="boton claro" href="vender.html">Cuéntanos tu propiedad</a>
+        <a class="boton h-boton-wa" id="cta-wa" href="#" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+      </div>
     </div>
   </section>
 </main>
 
 <script src="/js/datos.js?v=3"></script>
-<script src="/js/main.js?v=3"></script>
+<script src="/js/main.js?v=4"></script>
 <script>
 listo.then(() => {
-  if (IMAGENES.portada) document.getElementById("hero").style.backgroundImage = `url('${IMAGENES.portada}')`;
-  if (IMAGENES.comprar) document.getElementById("img-comprar").src = IMAGENES.comprar;
-  if (!TESTIMONIOS.length) { document.getElementById("opiniones").remove(); return; }
-  document.getElementById("testimonios").innerHTML = TESTIMONIOS.map(t =>
-    `<blockquote>“${t.texto}”</blockquote><cite>${t.autor}</cite>`).join("<br><br>");
+  /* Portada */
+  if (IMAGENES.portada) document.getElementById("hero").style.backgroundImage =
+    `linear-gradient(180deg, rgba(20,12,32,.30) 0%, rgba(20,12,32,.55) 55%, rgba(20,12,32,.80) 100%), url('${IMAGENES.portada}')`;
+
+  /* Buscador */
+  let tipo = "venta";
+  const selZona = document.getElementById("b-zona");
+  const rellenarZonas = () => {
+    const lista = tipo === "venta" ? VENTA : ALQUILER;
+    selZona.innerHTML = '<option value="">Todas las zonas</option>' +
+      [...new Set(lista.map((p) => p.zona))].sort().map((z) => `<option>${esc(z)}</option>`).join("");
+  };
+  rellenarZonas();
+  document.querySelectorAll(".h-tabs button").forEach((b) => b.addEventListener("click", () => {
+    tipo = b.dataset.tipo;
+    document.querySelectorAll(".h-tabs button").forEach((x) => { x.classList.toggle("activo", x === b); x.setAttribute("aria-selected", x === b); });
+    rellenarZonas();
+  }));
+  document.getElementById("buscador").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = new URLSearchParams();
+    if (selZona.value) q.set("zona", selZona.value);
+    if (document.getElementById("b-hab").value) q.set("hab", document.getElementById("b-hab").value);
+    location.href = (tipo === "venta" ? "comprar.html" : "alquilar.html") + (q.toString() ? "?" + q : "");
+  });
+
+  /* Tarjetas de casas */
+  const orden = { Novedad: 0, Disponible: 1, Reservada: 2, Vendida: 3, Alquilada: 3 };
+  const destacar = (lista) => [...lista].sort((a, b) => (orden[a.estado] ?? 1) - (orden[b.estado] ?? 1)).slice(0, 3);
+  const tarjeta = (p, alq) => `
+    <article class="tarjeta aparecer">
+      <a class="tarjeta-foto" href="casa.html?tipo=${p.tipo}&id=${p.id}">
+        <img src="${esc(p.img)}" alt="${esc(p.nombre)} en ${esc(p.zona)}" loading="lazy">
+        ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
+      </a>
+      <div class="tarjeta-cuerpo">
+        <h3><a href="casa.html?tipo=${p.tipo}&id=${p.id}">${esc(p.nombre)}</a></h3>
+        <span class="zona">${esc(p.zona)}</span>
+        <div class="datos">
+          <div><small>Habitaciones</small><strong>${p.hab ?? "–"}</strong></div>
+          <div><small>Baños</small><strong>${p.banos ?? "–"}</strong></div>
+          <div><small>m²</small><strong>${p.m2 ?? "–"}</strong></div>
+        </div>
+        <div class="precio-fila">
+          <span class="precio">${euros(p.precio)}${alq ? " <small>/mes</small>" : ""}</span>
+          <a class="enlace-visita" href="casa.html?tipo=${p.tipo}&id=${p.id}">Ver casa →</a>
+        </div>
+      </div>
+    </article>`;
+  const pintar = (id, lista, alq, seccion) => {
+    const el = document.getElementById(id);
+    const d = destacar(lista);
+    if (!d.length) { document.getElementById(seccion)?.remove(); return; }
+    el.innerHTML = d.map((p) => tarjeta(p, alq)).join("");
+  };
+  pintar("lista-venta", VENTA, false, "destacadas");
+  pintar("lista-alquiler", ALQUILER, true, "seccion-alquiler");
+
+  /* Opiniones */
+  if (!TESTIMONIOS.length) document.getElementById("opiniones").remove();
+  else document.getElementById("testimonios").innerHTML = TESTIMONIOS.map((t) =>
+    `<figure class="h-opinion aparecer"><blockquote>“${esc(t.texto)}”</blockquote><figcaption>${esc(t.autor)}</figcaption></figure>`).join("");
+
+  /* WhatsApp para propietarios */
+  document.getElementById("cta-wa").href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola, tengo una vivienda y me gustaría venderla o alquilarla con Evolv Real Estate.")}`;
+
+  observarAparicion();
 });
 </script>
 </body>
