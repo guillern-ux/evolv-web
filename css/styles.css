@@ -273,3 +273,24 @@ a { color: inherit; }
   .h-cta { padding: 3rem 0; }
   .h-cta-botones .boton { width: 100%; text-align: center; }
 }
+
+/* Carrusel de casas destacadas */
+.h-carrusel { position: relative; }
+.h-pista { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 4rem) / 3); gap: 2rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: .6rem .2rem 1.6rem; margin: -.6rem -.2rem 0; overscroll-behavior-x: contain; }
+.h-pista::-webkit-scrollbar { display: none; }
+.h-pista > .tarjeta { scroll-snap-align: start; }
+.h-pista:focus-visible { outline: 2px solid var(--morado); outline-offset: 4px; border-radius: var(--radio); }
+.h-flecha { position: absolute; top: 120px; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 0; background: #fff; color: var(--morado); box-shadow: 0 6px 20px rgba(40,26,57,.18); cursor: pointer; display: grid; place-items: center; z-index: 2; transition: background .2s, color .2s, opacity .2s; }
+.h-flecha svg { width: 24px; height: 24px; fill: currentColor; }
+.h-flecha.prev { left: -22px; }
+.h-flecha.next { right: -22px; }
+.h-flecha:hover { background: var(--morado); color: #fff; }
+.h-flecha:disabled { opacity: 0; pointer-events: none; }
+.h-puntos { display: flex; justify-content: center; gap: .5rem; min-height: 8px; }
+.h-puntos button { width: 8px; height: 8px; border-radius: 999px; border: 0; padding: 0; background: #cfc9da; cursor: pointer; transition: width .25s, background .25s; }
+.h-puntos button.activo { width: 26px; background: var(--morado); }
+@media (max-width: 1000px) { .h-pista { grid-auto-columns: calc((100% - 2rem) / 2); } }
+@media (max-width: 680px) {
+  .h-pista { grid-auto-columns: 86%; gap: 1rem; }
+  .h-flecha { display: none; }
+}
