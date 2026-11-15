@@ -1,0 +1,127 @@
+media:
+  input: img
+  output: /img
+
+content:
+  - name: venta
+    label: Casas en venta
+    type: file
+    path: data/venta.json
+    format: json
+    list: true
+    fields:
+      - name: nombre
+        label: Nombre
+        type: string
+        required: true
+      - name: zona
+        label: Zona
+        type: string
+        required: true
+      - name: hab
+        label: Habitaciones
+        type: number
+      - name: banos
+        label: Baños
+        type: number
+      - name: m2
+        label: Metros cuadrados
+        type: number
+      - name: precio
+        label: Precio (€)
+        type: number
+        required: true
+      - name: img
+        label: Foto
+        type: image
+      - name: visible
+        label: Mostrar en la web
+        type: boolean
+        default: true
+
+  - name: alquiler
+    label: Casas en alquiler
+    type: file
+    path: data/alquiler.json
+    format: json
+    list: true
+    fields:
+      - name: nombre
+        label: Nombre
+        type: string
+        required: true
+      - name: zona
+        label: Zona
+        type: string
+        required: true
+      - name: hab
+        label: Habitaciones
+        type: number
+      - name: banos
+        label: Baños
+        type: number
+      - name: m2
+        label: Metros cuadrados
+        type: number
+      - name: precio
+        label: Precio al mes (€)
+        type: number
+        required: true
+      - name: img
+        label: Foto
+        type: image
+      - name: visible
+        label: Mostrar en la web
+        type: boolean
+        default: true
+
+  - name: ajustes
+    label: Ajustes de la web
+    type: file
+    path: data/ajustes.json
+    format: json
+    fields:
+      - name: nombre
+        label: Nombre de la empresa
+        type: string
+      - name: telefono
+        label: Teléfono
+        type: string
+      - name: whatsapp
+        label: WhatsApp (solo números, con 34 delante)
+        type: string
+      - name: email
+        label: Email de contacto
+        type: string
+      - name: direccion
+        label: Dirección
+        type: string
+      - name: instagram
+        label: Instagram (URL)
+        type: string
+      - name: facebook
+        label: Facebook (URL, vacío para ocultar)
+        type: string
+      - name: linkedin
+        label: LinkedIn (URL, vacío para ocultar)
+        type: string
+      - name: formularioUrl
+        label: Dirección de Google Sheets para formularios (no tocar)
+        type: string
+      - name: portada
+        label: Foto de portada
+        type: image
+      - name: imagenComprar
+        label: Foto de la sección Comprar
+        type: image
+      - name: testimonios
+        label: Opiniones de clientes (reales)
+        type: object
+        list: true
+        fields:
+          - name: texto
+            label: Opinión
+            type: text
+          - name: autor
+            label: Nombre del cliente
+            type: string

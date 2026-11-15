@@ -55,9 +55,9 @@
 <script src="js/datos.js"></script>
 <script src="js/main.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("hero").style.backgroundImage = `url('${IMAGENES.portada}')`;
-  document.getElementById("img-comprar").src = IMAGENES.comprar;
+listo.then(() => {
+  if (IMAGENES.portada) document.getElementById("hero").style.backgroundImage = `url('${IMAGENES.portada}')`;
+  if (IMAGENES.comprar) document.getElementById("img-comprar").src = IMAGENES.comprar;
   if (!TESTIMONIOS.length) { document.getElementById("opiniones").remove(); return; }
   document.getElementById("testimonios").innerHTML = TESTIMONIOS.map(t =>
     `<blockquote>“${t.texto}”</blockquote><cite>${t.autor}</cite>`).join("<br><br>");
