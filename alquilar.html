@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alquilar | Evolv Real Estate</title>
+<meta name="description" content="Alquila una vivienda en la Sierra de Madrid con Evolv Real Estate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<main class="contenedor">
+  <div class="cabecera-pagina"><h1 class="titulo">Alquila una vivienda</h1></div>
+  
+    <div class="filtros">
+      <select id="filtro-zona" aria-label="Zona"><option value="">Todas las zonas</option></select>
+      <select id="filtro-hab" aria-label="Habitaciones"><option value="">Habitaciones</option><option value="3">3+</option><option value="4">4+</option><option value="5">5+</option><option value="6">6+</option></select>
+      <select id="filtro-orden" aria-label="Ordenar"><option value="">Ordenar por</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option></select>
+    </div>
+  <div class="rejilla" id="listado"></div>
+</main>
+
+<script src="js/datos.js"></script>
+<script src="js/main.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => pintarListado(ALQUILER, "listado", true));</script>
+</body>
+</html>

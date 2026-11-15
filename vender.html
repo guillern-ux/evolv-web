@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vender | Evolv Real Estate</title>
+<meta name="description" content="Vende o alquila tu propiedad en la Sierra de Madrid de forma rápida y sencilla.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<main class="contenedor">
+  <div class="cabecera-pagina"><h1 class="titulo">Vende tu propiedad rápida y sencillamente</h1></div>
+  <div class="caja-form" style="margin-bottom:6rem">
+    <div class="aviso-ok">¡Gracias! Hemos recibido los datos de tu propiedad. Te contactaremos muy pronto.</div>
+    <form class="formulario" data-asunto="Nueva propiedad para vender/alquilar">
+      <div><label for="v-nombre">Nombre *</label><input id="v-nombre" name="Nombre" required></div>
+      <div><label for="v-apellido">Apellido</label><input id="v-apellido" name="Apellido"></div>
+      <div><label for="v-email">Email *</label><input id="v-email" type="email" name="email" required></div>
+      <div><label for="v-tel">Teléfono</label><input id="v-tel" type="tel" name="Teléfono"></div>
+      <div><label for="v-barrio">Barrio</label><input id="v-barrio" name="Barrio"></div>
+      <div><label for="v-piso">Piso</label><input id="v-piso" name="Piso"></div>
+      <div class="completo"><label for="v-dir">Dirección completa</label><input id="v-dir" name="Dirección"></div>
+      <div><label for="v-hab">Número de habitaciones</label><input id="v-hab" type="number" min="0" name="Habitaciones"></div>
+      <div><label for="v-hist">Historia del edificio</label><input id="v-hist" name="Historia del edificio"></div>
+      <div class="completo"><label>Servicio que desea realizar *</label>
+        <div class="radios">
+          <label><input type="radio" name="Servicio" value="Vender vivienda" required> Vender vivienda</label>
+          <label><input type="radio" name="Servicio" value="Alquilar vivienda"> Alquilar vivienda</label>
+        </div>
+      </div>
+      <div class="completo"><label>Servicios</label>
+        <div class="casillas">
+          <label><input type="checkbox" name="Servicios[]" value="Portero"> Portero</label>
+          <label><input type="checkbox" name="Servicios[]" value="Almacén"> Almacén</label>
+          <label><input type="checkbox" name="Servicios[]" value="Elevador"> Elevador</label>
+          <label><input type="checkbox" name="Servicios[]" value="Lavadora/secadora"> Lavadora/secadora</label>
+          <label><input type="checkbox" name="Servicios[]" value="Luz natural"> Luz natural</label>
+          <label><input type="checkbox" name="Servicios[]" value="Lavandería"> Lavandería</label>
+          <label><input type="checkbox" name="Servicios[]" value="Techos altos"> Techos altos</label>
+        </div>
+      </div>
+      <p class="legal completo"><label style="display:flex;gap:.5rem;font-weight:400"><input type="checkbox" required style="width:auto"> He leído y acepto la <a href="privacidad.html">política de privacidad</a>.</label></p>
+      <button class="boton" type="submit">Enviar</button>
+    </form>
+  </div>
+</main>
+
+<script src="js/datos.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

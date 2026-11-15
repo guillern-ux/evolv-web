@@ -1,0 +1,7 @@
+# Redirecciones de las URLs antiguas de Wix (Cloudflare Pages)
+/evolvrealestate              /                301
+/evolvrealestate/*            /:splat          301
+/book-online                  /reservar        301
+/my-bookings                  /reservar        301
+/pol%C3%ADtica-de-privacidad  /privacidad      301
+/política-de-privacidad       /privacidad      301

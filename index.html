@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evolv Real Estate | Agencia Inmobiliaria Sierra de Madrid</title>
+<meta name="description" content="Agencia inmobiliaria en la Sierra de Madrid. Compra, alquila o vende casas y chalets con Evolv Real Estate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="contenedor">
+      <h1>Tu futuro hogar está aquí</h1>
+      <p>Evolv Real Estate</p>
+      <a href="alquilar.html" class="boton">Alquilar +</a>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="contenedor bloque-doble">
+      <div class="aparecer">
+        <h2 class="titulo">Comprar vivienda</h2>
+        <p>Descubre casas y chalets seleccionados por Evolv Real Estate. Te acompañamos en cada paso para que compres con seguridad y confianza.</p>
+        <a href="comprar.html" class="boton">Comprar +</a>
+      </div>
+      <img id="img-comprar" class="aparecer" alt="Casa en la Sierra de Madrid" loading="lazy">
+    </div>
+  </section>
+
+  <section class="seccion oscura">
+    <div class="contenedor">
+      <h2 class="titulo aparecer">Por qué trabajar con nosotros</h2>
+      <div class="ventajas">
+        <div class="ventaja aparecer"><h3>Exclusivo</h3><p>Ofrecemos propiedades únicas seleccionadas con el máximo detalle para garantizar tu satisfacción.</p></div>
+        <div class="ventaja aparecer"><h3>Disponible</h3><p>Estamos a tu lado siempre que nos necesites, 24/7 para resolver tus dudas.</p></div>
+        <div class="ventaja aparecer"><h3>Flexible</h3><p>Nos adaptamos a tus necesidades y horarios para que encuentres el hogar perfecto sin complicaciones.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion lavanda" id="opiniones">
+    <div class="contenedor testimonio aparecer">
+      <h2 class="titulo">Qué dicen nuestros clientes</h2>
+      <div id="testimonios"></div>
+    </div>
+  </section>
+</main>
+
+<script src="js/datos.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("hero").style.backgroundImage = `url('${IMAGENES.portada}')`;
+  document.getElementById("img-comprar").src = IMAGENES.comprar;
+  if (!TESTIMONIOS.length) { document.getElementById("opiniones").remove(); return; }
+  document.getElementById("testimonios").innerHTML = TESTIMONIOS.map(t =>
+    `<blockquote>“${t.texto}”</blockquote><cite>${t.autor}</cite>`).join("<br><br>");
+});
+</script>
+</body>
+</html>

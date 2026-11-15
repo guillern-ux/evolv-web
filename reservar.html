@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reserva online | Evolv Real Estate</title>
+<meta name="description" content="Solicita una visita exclusiva a los inmuebles de Evolv Real Estate en la Sierra de Madrid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<main class="contenedor">
+  <div class="cabecera-pagina">
+    <h1 class="titulo">Visita exclusiva a nuestros inmuebles</h1>
+    <p>Descubre en exclusiva los inmuebles de Evolv Real Estate en la Sierra de Madrid. Visita de 1 h.</p>
+  </div>
+  <div class="caja-form" style="margin-bottom:6rem">
+    <div class="aviso-ok">¡Solicitud recibida! Te confirmaremos la visita por teléfono o email.</div>
+    <form class="formulario" data-asunto="Solicitud de visita">
+      <div><label for="r-nombre">Nombre *</label><input id="r-nombre" name="Nombre" required></div>
+      <div><label for="r-tel">Teléfono *</label><input id="r-tel" type="tel" name="Teléfono" required></div>
+      <div class="completo"><label for="r-email">Email *</label><input id="r-email" type="email" name="email" required></div>
+      <div class="completo"><label for="r-inmueble">Inmueble que quieres visitar</label><input id="r-inmueble" name="Inmueble" placeholder="Ej.: Chalet en Los Molinos"></div>
+      <div><label for="r-fecha">Fecha preferida *</label><input id="r-fecha" type="date" name="Fecha" required></div>
+      <div><label for="r-hora">Franja horaria</label>
+        <select id="r-hora" name="Franja"><option>Mañana (9:00–14:00)</option><option>Tarde (16:00–20:00)</option><option>Me da igual</option></select>
+      </div>
+      <div class="completo"><label for="r-msg">Comentarios</label><textarea id="r-msg" name="Comentarios"></textarea></div>
+      <p class="legal completo"><label style="display:flex;gap:.5rem;font-weight:400"><input type="checkbox" required style="width:auto"> He leído y acepto la <a href="privacidad.html">política de privacidad</a>.</label></p>
+      <button class="boton" type="submit">Solicitar visita</button>
+    </form>
+  </div>
+</main>
+
+<script src="js/datos.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const p = new URLSearchParams(location.search).get("inmueble");
+  if (p) document.getElementById("r-inmueble").value = p;
+  document.getElementById("r-fecha").min = new Date().toISOString().split("T")[0];
+});
+</script>
+</body>
+</html>
