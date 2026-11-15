@@ -246,6 +246,7 @@ const nombreMsj = (m) => [m.Nombre, m.Apellido].filter(Boolean).join(" ") || m.e
 function tipoMsj(m) {
   const f = (m.Formulario || "").toLowerCase();
   if (f.includes("visita")) return "Visita";
+  if (f.includes("valoraci")) return "Valoración";
   if (f.includes("propiedad") || f.includes("vender")) return "Propietario";
   if (f.includes("prueba")) return "Prueba";
   return "Contacto";
@@ -263,7 +264,7 @@ function filtrarMensajes() {
   return S.mensajes.filter((m) => {
     const t = tipoMsj(m), e = m.Estado || "Nuevo";
     const okF = S.filtro === "todos" || (S.filtro === "nuevos" && e === "Nuevo") || (S.filtro === "cerrados" && e === "Cerrado") ||
-      (S.filtro === "visitas" && t === "Visita") || (S.filtro === "propietarios" && t === "Propietario") || (S.filtro === "contacto" && t === "Contacto");
+      (S.filtro === "visitas" && t === "Visita") || (S.filtro === "propietarios" && (t === "Propietario" || t === "Valoración")) || (S.filtro === "contacto" && t === "Contacto");
     return okF && (!q || Object.values(m).join(" ").toLowerCase().includes(q));
   });
 }
@@ -554,6 +555,7 @@ function vAjustes() {
   const a = S.ajustes || {};
   const campo = (k, etq, tipo = "text") => `<div><label>${etq}</label><input type="${tipo}" data-aj="${k}" value="${esc(a[k] ?? "")}"></div>`;
   const permiso = window.Notification ? Notification.permission : "no";
+  const V = a.valoracion || {};
   return `
   <section class="caja" style="margin-bottom:1.5rem"><h2>Conexión con GitHub ${S.github ? '<span class="chip disponible">Conectado</span>' : '<span class="chip pendiente">Sin conectar</span>'}</h2>
     ${S.github ? `<p>El panel puede crear y editar casas, fotos y ajustes de tu web. Cada cambio se publica solo en 1-2 minutos.</p>` : `
@@ -592,6 +594,22 @@ function vAjustes() {
         <div><label>Nombre del cliente</label><input type="text" data-tt="${k}" data-c="autor" value="${esc(t.autor)}"></div>
         <div style="align-self:end"><button class="btn rojo peq" data-acc="quitarTestimonio" data-k="${k}">Quitar</button></div>
       </div>`).join("") || '<p class="vacio">Añade opiniones reales de tus clientes (con su permiso).</p>'}</div>
+    <h2 style="margin-top:1.4rem">Valoración automática de viviendas</h2>
+    <p style="margin-bottom:.7rem">Cuando un propietario rellena <b>Valorar mi casa</b>, la web calcula una horquilla orientativa con estos precios por m² (ajustada por tipo, estado, tamaño y extras) y se la envía por email. Revísalos de vez en cuando con tu conocimiento de la zona. Si un municipio no está en la lista, no se envía cifra y te llega la solicitud para que la valores tú.</p>
+    <div class="campos">
+      <div><label class="interruptor"><input type="checkbox" id="val-activa" ${V.activa !== false ? "checked" : ""}> Enviar valoración automática</label></div>
+      <div><label>Margen de la horquilla (± %)</label><input type="number" id="val-margen" min="3" max="20" value="${esc(V.margen ?? 8)}"></div>
+    </div>
+    <div class="tabla-precios">
+      <div class="tp-cab"><span>Municipio</span><span>Pisos (€/m²)</span><span>Casas (€/m²)</span><span></span></div>
+      ${(V.municipios || []).map((m, k) => `<div class="tp-fila">
+        <input type="text" data-vm="${k}" data-c="nombre" value="${esc(m.nombre)}" placeholder="Municipio">
+        <input type="number" data-vm="${k}" data-c="piso" value="${esc(m.piso ?? "")}" placeholder="Pisos €/m²">
+        <input type="number" data-vm="${k}" data-c="casa" value="${esc(m.casa ?? "")}" placeholder="Casas €/m²">
+        <button class="btn rojo peq" data-acc="quitarMunicipio" data-k="${k}">Quitar</button></div>`).join("")}
+    </div>
+    <div class="acciones" style="margin-top:.6rem"><button class="btn peq" data-acc="addMunicipio">+ Añadir municipio</button></div>
+    ${V.fuente ? `<p style="margin-top:.6rem;color:var(--md);font-size:.85rem">Precios de partida: ${esc(V.fuente)}</p>` : ""}
     <div class="acciones" style="margin-top:1.2rem"><button class="btn primario" data-acc="guardarAjustes">Guardar y publicar</button></div>
   </section>` : ""}
 
@@ -620,6 +638,11 @@ function leerAjustes() {
   $$("[data-aj]").forEach((el) => { a[el.dataset.aj] = el.value.trim(); });
   a.testimonios = a.testimonios || [];
   $$("[data-tt]").forEach((el) => { a.testimonios[Number(el.dataset.tt)][el.dataset.c] = el.value.trim(); });
+  a.valoracion = a.valoracion || { activa: true, margen: 8, municipios: [] };
+  a.valoracion.municipios = a.valoracion.municipios || [];
+  const act = $("#val-activa");
+  if (act) { a.valoracion.activa = act.checked; a.valoracion.margen = Number($("#val-margen").value) || 8; }
+  $$("[data-vm]").forEach((el) => { const m = a.valoracion.municipios[Number(el.dataset.vm)]; m[el.dataset.c] = el.dataset.c === "nombre" ? el.value.trim() : Number(el.value) || null; });
 }
 
 /* =========================================================
@@ -763,9 +786,12 @@ const ACC = {
   }).catch((e) => toast(e.message, "error")),
   addTestimonio: () => { leerAjustes(); S.ajustes.testimonios.push({ texto: "", autor: "" }); pintar(); },
   quitarTestimonio: (b) => { leerAjustes(); S.ajustes.testimonios.splice(Number(b.dataset.k), 1); pintar(); },
+  addMunicipio: () => { leerAjustes(); S.ajustes.valoracion.municipios.push({ nombre: "", piso: null, casa: null }); pintar(); },
+  quitarMunicipio: (b) => { leerAjustes(); S.ajustes.valoracion.municipios.splice(Number(b.dataset.k), 1); pintar(); },
   guardarAjustes: (b) => conBoton(b, async () => {
     leerAjustes();
     S.ajustes.testimonios = S.ajustes.testimonios.filter((t) => t.texto);
+    S.ajustes.valoracion.municipios = S.ajustes.valoracion.municipios.filter((m) => m.nombre);
     const r = await api("guardarAjustes", { ajustes: S.ajustes, sha: S.shaAj });
     S.shaAj = r.sha;
     toast("Ajustes guardados ✓ La web se actualiza en 1-2 minutos", "ok");

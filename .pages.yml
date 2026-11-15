@@ -174,3 +174,32 @@ content:
           - name: autor
             label: Nombre del cliente
             type: string
+      - name: valoracion
+        label: Valoración automática de viviendas
+        type: object
+        fields:
+          - name: activa
+            label: Enviar valoración automática
+            type: boolean
+            default: true
+          - name: margen
+            label: Margen de la horquilla (± %)
+            type: number
+            default: 8
+          - name: fuente
+            label: Fuente de los precios
+            type: string
+          - name: municipios
+            label: Precio por m² de cada municipio
+            type: object
+            list: true
+            fields:
+              - name: nombre
+                label: Municipio
+                type: string
+              - name: piso
+                label: Pisos (€/m²)
+                type: number
+              - name: casa
+                label: Casas (€/m²)
+                type: number
