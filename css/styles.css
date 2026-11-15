@@ -185,3 +185,92 @@ a { color: inherit; }
   .ficha-rejilla { grid-template-columns: 1fr; gap: 1.5rem; }
   .ficha-info { position: static; }
 }
+
+/* =========================================================
+   PORTADA (rediseño)
+   ========================================================= */
+.home .cabecera { background: rgba(246,246,246,.96); }
+.h-eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 800; color: var(--celeste); margin-bottom: .8rem; }
+.h-eyebrow.oscuro { color: var(--morado-medio); }
+.oscura .h-eyebrow { color: var(--celeste); }
+
+/* Hero */
+.h-hero { position: relative; min-height: calc(100vh - 76px); display: flex; align-items: center; background: var(--morado) center 65% / cover no-repeat; color: #fff; padding: 5rem 0 4rem; }
+.h-hero-dentro { max-width: var(--ancho); }
+.h-hero h1 { font-size: clamp(2.4rem, 5.6vw, 4.6rem); line-height: 1.05; font-weight: 800; max-width: 15ch; letter-spacing: -.01em; text-shadow: 0 2px 24px rgba(0,0,0,.25); }
+.h-sub { font-size: clamp(1.05rem, 1.6vw, 1.25rem); max-width: 52ch; margin-top: 1.2rem; color: rgba(255,255,255,.92); }
+
+/* Buscador */
+.h-buscador { margin-top: 2.2rem; background: #fff; border-radius: 18px; padding: .6rem; max-width: 860px; box-shadow: 0 20px 60px rgba(0,0,0,.28); color: var(--texto); }
+.h-tabs { display: flex; gap: .3rem; padding: .2rem .2rem .6rem; }
+.h-tabs button { border: 0; background: transparent; font: inherit; font-weight: 700; color: var(--morado-medio); padding: .45rem 1rem; border-radius: 999px; cursor: pointer; }
+.h-tabs button.activo { background: var(--morado); color: #fff; }
+.h-campos { display: grid; grid-template-columns: 1fr 1fr auto; gap: .5rem; align-items: end; }
+.h-campo { display: flex; flex-direction: column; gap: .25rem; background: var(--blanco-roto); border-radius: 12px; padding: .55rem .9rem; }
+.h-campo span { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--morado-medio); }
+.h-campo select { border: 0; background: transparent; font: inherit; font-weight: 700; color: var(--morado); padding: .15rem 0; outline: none; cursor: pointer; }
+.h-buscar { border-radius: 12px; padding: 1.05rem 1.8rem; height: 100%; }
+.h-confianza { list-style: none; display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; margin-top: 1.6rem; font-weight: 700; font-size: .95rem; }
+.h-confianza li { display: flex; align-items: center; gap: .45rem; }
+.h-confianza svg { width: 18px; height: 18px; fill: var(--celeste); }
+
+/* Cabeceras de sección */
+.h-cabecera { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.4rem; }
+.h-cabecera .titulo { margin-bottom: 0; }
+.h-cabecera.centrada { justify-content: center; text-align: center; flex-direction: column; align-items: center; }
+.h-ver-todo { font-weight: 700; color: var(--morado); text-decoration: none; border-bottom: 2px solid var(--lavanda); padding-bottom: 2px; }
+.h-ver-todo:hover { border-color: var(--morado); }
+.h-rejilla { padding-bottom: 0; grid-template-columns: repeat(3, 1fr); }
+
+/* Servicios */
+.h-servicios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.h-servicio { background: #fff; border-radius: 18px; padding: 2rem; text-decoration: none; color: var(--texto); display: flex; flex-direction: column; gap: .8rem; box-shadow: 0 2px 18px rgba(40,26,57,.06); transition: transform .25s, box-shadow .25s; }
+.h-servicio:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(40,26,57,.14); }
+.h-servicio h3 { font-size: 1.4rem; color: var(--morado); }
+.h-servicio p { color: var(--morado-medio); flex: 1; }
+.h-servicio.destacado { background: var(--morado); color: #fff; }
+.h-servicio.destacado h3 { color: #fff; }
+.h-servicio.destacado p { color: var(--lavanda); }
+.h-servicio.destacado .h-enlace { color: var(--celeste); }
+.h-enlace { font-weight: 800; color: var(--morado); }
+.h-icono { width: 52px; height: 52px; border-radius: 14px; background: var(--lavanda); display: grid; place-items: center; flex: none; }
+.h-icono svg { width: 26px; height: 26px; fill: var(--morado); }
+.h-servicio.destacado .h-icono, .h-icono.claro { background: rgba(255,255,255,.1); }
+.h-servicio.destacado .h-icono svg, .h-icono.claro svg { fill: var(--celeste); }
+
+/* Por qué Evolv */
+.h-porque { display: grid; grid-template-columns: 1fr 1.1fr; gap: 4rem; align-items: center; }
+.h-porque-texto { color: var(--lavanda); font-size: 1.12rem; margin: 1rem 0 2rem; max-width: 46ch; }
+.h-ventajas { display: grid; gap: 1.2rem; }
+.h-ventaja { display: flex; gap: 1.1rem; padding: 1.3rem; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); }
+.h-ventaja h3 { font-size: 1.15rem; margin-bottom: .2rem; }
+.h-ventaja p { color: var(--lavanda); }
+
+/* Opiniones */
+.h-opiniones { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.h-opinion { background: #fff; border-radius: 18px; padding: 2rem; box-shadow: 0 2px 18px rgba(40,26,57,.06); }
+.h-opinion blockquote { font-size: 1.1rem; color: var(--texto); margin-bottom: 1rem; }
+.h-opinion figcaption { font-weight: 800; color: var(--morado); }
+
+/* Llamada final */
+.h-cta { background: linear-gradient(120deg, var(--morado) 0%, #3d2a57 100%); color: #fff; padding: 4.5rem 0; }
+.h-cta-dentro { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.h-cta h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.15; }
+.h-cta p { color: var(--lavanda); margin-top: .5rem; font-size: 1.08rem; }
+.h-cta-botones { display: flex; gap: .8rem; flex-wrap: wrap; }
+.h-boton-wa { background: #25d366; border-color: #25d366; }
+.h-boton-wa:hover { background: transparent; color: #fff !important; border-color: #fff; }
+
+@media (max-width: 1000px) {
+  .h-rejilla, .h-servicios { grid-template-columns: 1fr 1fr; }
+  .h-porque { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+@media (max-width: 680px) {
+  .h-hero { min-height: auto; padding: 3.5rem 0 3rem; }
+  .h-campos { grid-template-columns: 1fr; }
+  .h-buscar { width: 100%; }
+  .h-rejilla, .h-servicios { grid-template-columns: 1fr; }
+  .h-cabecera { margin-bottom: 1.6rem; }
+  .h-cta { padding: 3rem 0; }
+  .h-cta-botones .boton { width: 100%; text-align: center; }
+}
