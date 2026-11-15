@@ -140,17 +140,27 @@ function activarFormularios() {
       boton.disabled = true;
       boton.textContent = "Enviando…";
       const datos = new FormData(form);
-      datos.append("_subject", form.dataset.asunto || "Nuevo mensaje desde la web");
-      datos.append("_template", "table");
-      datos.append("_captcha", "false");
-      datos.append("_honey", ""); // anti-spam
+      const asunto = form.dataset.asunto || "Nuevo mensaje desde la web";
       try {
-        const r = await fetch(`https://formsubmit.co/ajax/${CONFIG.email}`, {
-          method: "POST",
-          headers: { Accept: "application/json" },
-          body: datos,
-        });
-        if (!r.ok) throw new Error();
+        if (CONFIG.formularioUrl) {
+          // Google Sheets (Apps Script): guarda la fila y te avisa por email
+          const cuerpo = new URLSearchParams();
+          cuerpo.append("Formulario", asunto);
+          cuerpo.append("Página", location.pathname);
+          for (const [k, v] of datos.entries()) cuerpo.append(k.replace("[]", ""), v);
+          await fetch(CONFIG.formularioUrl, { method: "POST", mode: "no-cors", body: cuerpo });
+        } else {
+          // Alternativa sin configurar: FormSubmit (solo email)
+          datos.append("_subject", asunto);
+          datos.append("_template", "table");
+          datos.append("_captcha", "false");
+          const r = await fetch(`https://formsubmit.co/ajax/${CONFIG.email}`, {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: datos,
+          });
+          if (!r.ok) throw new Error();
+        }
         form.reset();
         const aviso = form.parentElement.querySelector(".aviso-ok");
         if (aviso) aviso.classList.add("visible");
@@ -189,8 +199,10 @@ function observarAparicion() {
 
 /* ---------- Arranque ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  pintarCabecera();
-  pintarPie();
-  activarFormularios();
-  observarAparicion();
+  listo.then(() => {
+    pintarCabecera();
+    pintarPie();
+    activarFormularios();
+    observarAparicion();
+  });
 });
