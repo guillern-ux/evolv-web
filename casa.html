@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inmueble | Evolv Real Estate</title>
+<meta name="description" content="Inmueble de Evolv Real Estate en la Sierra de Madrid.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css?v=3">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<main class="contenedor ficha" id="ficha">
+  <p class="vacio" style="padding:8rem 0">Cargando…</p>
+</main>
+
+<script src="/js/datos.js?v=3"></script>
+<script src="/js/main.js?v=3"></script>
+<script>
+listo.then(() => {
+  const q = new URLSearchParams(location.search);
+  const tipo = q.get("tipo") === "alquiler" ? "alquiler" : "venta";
+  const lista = tipo === "alquiler" ? ALQUILER : VENTA;
+  const p = lista.find((x) => x.id === q.get("id"));
+  const ficha = document.getElementById("ficha");
+
+  if (!p) {
+    ficha.innerHTML = `<div style="padding:8rem 0;text-align:center"><h1 class="titulo">Este inmueble ya no está disponible</h1>
+      <p style="margin-bottom:2rem">Puede que se haya vendido o alquilado.</p>
+      <a class="boton" href="${tipo}.html">Ver otras casas</a></div>`;
+    return;
+  }
+
+  const esAlq = tipo === "alquiler";
+  const nombreCompleto = `${p.nombre} (${p.zona})`;
+  document.title = `${p.nombre} en ${p.zona} | Evolv Real Estate`;
+  document.querySelector('meta[name="description"]').content =
+    `${p.nombre} en ${p.zona}: ${p.hab} habitaciones, ${p.banos} baños, ${p.m2} m². ${euros(p.precio)}${esAlq ? " al mes" : ""}.`;
+
+  const wa = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`Hola, me interesa ${nombreCompleto} que he visto en evolvrealestate.com`)}`;
+  const mapa = `https://maps.google.com/maps?q=${encodeURIComponent((p.ubicacion || p.zona) + ", Madrid, España")}&z=13&output=embed`;
+  const cerrada = p.estado === "Vendida" || p.estado === "Alquilada";
+  const parrafos = (p.descripcion || "").split(/\n+/).filter(Boolean).map((t) => `<p>${esc(t)}</p>`).join("");
+
+  ficha.innerHTML = `
+    <a class="volver" href="${tipo === "alquiler" ? "alquilar" : "comprar"}.html">← Volver a ${esAlq ? "alquiler" : "venta"}</a>
+    <div class="ficha-rejilla">
+      <div class="galeria">
+        <div class="galeria-principal">
+          <img id="foto-grande" src="${esc(p.fotos[0] || "")}" alt="${esc(p.nombre)}">
+          ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
+        </div>
+        ${p.fotos.length > 1 ? `<div class="miniaturas">${p.fotos.map((f, i) =>
+          `<button type="button" class="${i === 0 ? "activa" : ""}" data-src="${esc(f)}" aria-label="Foto ${i + 1}"><img src="${esc(f)}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}
+      </div>
+
+      <aside class="ficha-info">
+        <span class="zona">${esc(p.zona)}</span>
+        <h1 class="titulo">${esc(p.nombre)}</h1>
+        <p class="precio grande">${euros(p.precio)}${esAlq ? " <small>/mes</small>" : ""}</p>
+        <div class="datos">
+          <div><small>Habitaciones</small><strong>${p.hab ?? "—"}</strong></div>
+          <div><small>Baños</small><strong>${p.banos ?? "—"}</strong></div>
+          <div><small>m²</small><strong>${p.m2 ?? "—"}</strong></div>
+        </div>
+        ${cerrada ? `<p class="aviso-cerrada">Este inmueble ya está ${p.estado.toLowerCase()}. Escríbenos y te avisamos de casas parecidas.</p>` : ""}
+        <div class="acciones">
+          ${cerrada ? "" : `<a class="boton" href="reservar.html?inmueble=${encodeURIComponent(nombreCompleto)}">Solicitar visita</a>`}
+          <a class="boton boton-wa" href="${wa}" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="boton boton-borde" href="tel:${(CONFIG.telefono || "").replace(/\s/g, "")}">Llamar</a>
+        </div>
+      </aside>
+    </div>
+
+    ${parrafos ? `<section class="ficha-texto"><h2>Descripción</h2>${parrafos}</section>` : ""}
+
+    <section class="ficha-mapa">
+      <h2>Ubicación aproximada</h2>
+      <iframe src="${mapa}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ${esc(p.zona)}"></iframe>
+    </section>`;
+
+  ficha.querySelectorAll(".miniaturas button").forEach((b) =>
+    b.addEventListener("click", () => {
+      document.getElementById("foto-grande").src = b.dataset.src;
+      ficha.querySelectorAll(".miniaturas button").forEach((x) => x.classList.toggle("activa", x === b));
+    })
+  );
+});
+</script>
+</body>
+</html>

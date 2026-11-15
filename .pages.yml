@@ -38,6 +38,22 @@ content:
         label: Mostrar en la web
         type: boolean
         default: true
+      - name: estado
+        label: Estado
+        type: select
+        default: Disponible
+        options:
+          values: [Disponible, Novedad, Reservada, Vendida]
+      - name: descripcion
+        label: Descripción
+        type: text
+      - name: galeria
+        label: Más fotos
+        type: image
+        list: true
+      - name: ubicacion
+        label: Ubicación para el mapa (calle o pueblo)
+        type: string
 
   - name: alquiler
     label: Casas en alquiler
@@ -74,6 +90,22 @@ content:
         label: Mostrar en la web
         type: boolean
         default: true
+      - name: estado
+        label: Estado
+        type: select
+        default: Disponible
+        options:
+          values: [Disponible, Novedad, Reservada, Alquilada]
+      - name: descripcion
+        label: Descripción
+        type: text
+      - name: galeria
+        label: Más fotos
+        type: image
+        list: true
+      - name: ubicacion
+        label: Ubicación para el mapa (calle o pueblo)
+        type: string
 
   - name: ajustes
     label: Ajustes de la web
@@ -104,6 +136,15 @@ content:
         type: string
       - name: linkedin
         label: LinkedIn (URL, vacío para ocultar)
+        type: string
+      - name: titular
+        label: Titular (aviso legal)
+        type: string
+      - name: nif
+        label: NIF (aviso legal)
+        type: string
+      - name: domicilio
+        label: Domicilio completo (aviso legal)
         type: string
       - name: formularioUrl
         label: Dirección de Google Sheets para formularios (no tocar)
