@@ -16,6 +16,7 @@ function pintarCabecera() {
     ["comprar.html", "Comprar"],
     ["alquilar.html", "Alquilar"],
     ["vender.html", "Vender"],
+    ["valorar.html", "Valorar mi casa"],
   ];
   const html = `
   <header class="cabecera">
@@ -51,6 +52,7 @@ function pintarPie() {
             <li><a href="comprar.html">Comprar</a></li>
             <li><a href="alquilar.html">Alquilar</a></li>
             <li><a href="vender.html">Vender</a></li>
+            <li><a href="valorar.html">Valorar mi casa</a></li>
             <li><a href="reservar.html">Reserva online</a></li>
             <li><a href="privacidad.html">Política de Privacidad</a></li>
             <li><a href="aviso-legal.html">Aviso legal</a></li>
