@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#281a39">
+<title>Panel · Evolv Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23281a39'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='800' font-size='36' text-anchor='middle' fill='%23f6f6f6'%3EE%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="panel.css?v=1">
+</head>
+<body>
+
+<!-- Acceso -->
+<section id="login" class="login oculto">
+  <form id="form-login" class="login-caja">
+    <div class="marca grande">EVOLV<span>Panel</span></div>
+    <p>Introduce la clave de tu panel para entrar.</p>
+    <input id="clave" type="password" autocomplete="current-password" placeholder="Clave del panel" required>
+    <button class="btn primario ancho" type="submit">Entrar</button>
+    <p class="error" id="login-error"></p>
+  </form>
+</section>
+
+<!-- Aplicación -->
+<div id="app" class="app oculto">
+  <aside class="lateral">
+    <div class="marca">EVOLV<span>Panel</span></div>
+    <nav id="nav">
+      <a href="#inicio" data-v="inicio"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Inicio</span></a>
+      <a href="#mensajes" data-v="mensajes"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2v.5l8 5 8-5V6zm16 2.8-8 5-8-5V18h16z"/></svg><span>Mensajes</span><b class="insignia" id="ins-mensajes"></b></a>
+      <a href="#visitas" data-v="visitas"><svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zm-2 8h14v10H5z"/></svg><span>Visitas</span><b class="insignia" id="ins-visitas"></b></a>
+      <a href="#casas" data-v="casas"><svg viewBox="0 0 24 24"><path d="M12 3 2 12h3v8h5v-6h4v6h5v-8h3z"/></svg><span>Casas</span></a>
+      <a href="#ajustes" data-v="ajustes"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm8.9 5.5-1.9-.3a7 7 0 0 1-.7 1.6l1.1 1.6-1.6 1.6-1.6-1.1a7 7 0 0 1-1.6.7l-.3 1.9h-2.3l-.3-1.9a7 7 0 0 1-1.6-.7l-1.6 1.1-1.6-1.6 1.1-1.6a7 7 0 0 1-.7-1.6l-1.9-.3v-2.3l1.9-.3a7 7 0 0 1 .7-1.6L4.7 7.3l1.6-1.6 1.6 1.1a7 7 0 0 1 1.6-.7l.3-1.9h2.3l.3 1.9a7 7 0 0 1 1.6.7l1.6-1.1 1.6 1.6-1.1 1.6a7 7 0 0 1 .7 1.6l1.9.3z"/></svg><span>Ajustes</span></a>
+    </nav>
+    <a class="ver-web" href="https://evolvrealestate.com" target="_blank" rel="noopener">Ver la web ↗</a>
+  </aside>
+
+  <main class="contenido">
+    <header class="barra">
+      <h1 id="titulo-vista">Inicio</h1>
+      <div class="barra-acciones">
+        <button class="btn icono" id="btn-recargar" title="Actualizar"><svg viewBox="0 0 24 24"><path d="M17.6 6.4A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.8-4.2L13 11h7V4z"/></svg></button>
+        <button class="btn icono campana" id="btn-avisos" title="Avisos"><svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.9V4a1 1 0 0 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1z"/></svg><b class="insignia" id="ins-avisos"></b></button>
+      </div>
+      <div class="avisos-lista oculto" id="avisos"></div>
+    </header>
+    <div id="vista" class="vista"></div>
+  </main>
+</div>
+
+<div id="modal" class="modal oculto"><div class="modal-caja" id="modal-caja"></div></div>
+<div id="toasts" class="toasts"></div>
+
+<script src="panel.js?v=1"></script>
+</body>
+</html>
