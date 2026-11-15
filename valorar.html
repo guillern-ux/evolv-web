@@ -99,6 +99,9 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
 .v-gracias .v-botones { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
 .v-resumen { background: var(--blanco-roto); border-radius: 14px; padding: 1rem 1.2rem; text-align: left; margin: 0 auto 1.6rem; max-width: 420px; font-size: .93rem; color: var(--morado-medio); }
 .v-resumen b { color: var(--morado); }
+.v-valor { background: var(--lavanda); border-radius: 18px; padding: 1.3rem 1rem; margin: 1.2rem auto .4rem; max-width: 460px; }
+.v-valor small { display: block; font-weight: 800; color: var(--morado-medio); text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; }
+.v-valor strong { display: block; color: var(--morado); font-size: clamp(1.6rem, 5vw, 2.2rem); line-height: 1.2; margin-top: .3rem; }
 .v-paso { animation: v-entrar .35s ease; }
 @keyframes v-entrar { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
 
@@ -126,7 +129,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
       <div>
         <p class="h-eyebrow oscuro">Valoración gratuita · Sierra de Madrid</p>
         <h1>¿Cuánto vale tu casa?</h1>
-        <p class="v-lead">Responde unas preguntas sobre tu vivienda y te enviamos una valoración profesional, hecha por quien conoce el mercado de la sierra.</p>
+        <p class="v-lead">Responde unas preguntas sobre tu vivienda y recibe al momento una valoración orientativa en tu email. Si quieres afinarla, la revisamos contigo sin compromiso.</p>
         <form class="v-buscar" id="v-inicio">
           <input id="v-dir-inicio" type="text" placeholder="Dirección o pueblo de tu vivienda" autocomplete="street-address" aria-label="Dirección de tu vivienda">
           <button class="boton" type="submit">Valorar mi casa</button>
@@ -140,9 +143,9 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
       <div class="v-foto" id="v-foto">
         <div class="v-tarjeta">
           <strong>Tu valoración con Evolv</strong>
-          <div><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3z"/></svg>Respuesta en 24–48 horas</div>
-          <div><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7zm0 4.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>Basada en ventas reales de tu zona</div>
-          <div><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v3h16v-3c0-2.8-3.6-5-8-5z"/></svg>Un asesor real, no un algoritmo</div>
+          <div><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3z"/></svg>Valoración orientativa al momento</div>
+          <div><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7zm0 4.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>Con precios de mercado de tu municipio</div>
+          <div><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v3h16v-3c0-2.8-3.6-5-8-5z"/></svg>Revisión personal gratuita si la quieres</div>
         </div>
       </div>
     </div>
@@ -153,8 +156,8 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
       <div class="h-cabecera centrada aparecer"><p class="h-eyebrow oscuro">Cómo funciona</p><h2 class="titulo">Tu valoración en tres pasos</h2></div>
       <div class="v-pasos-info">
         <div class="v-paso-info aparecer"><h3>Cuéntanos tu casa</h3><p>Ubicación, superficie, habitaciones y extras. Solo te llevará unos minutos.</p></div>
-        <div class="v-paso-info aparecer"><h3>La estudiamos</h3><p>Comparamos tu vivienda con las operaciones recientes y la demanda real de tu pueblo.</p></div>
-        <div class="v-paso-info aparecer"><h3>Recibe tu valoración</h3><p>Te contactamos con un precio de mercado realista y, si quieres, te explicamos cómo venderla.</p></div>
+        <div class="v-paso-info aparecer"><h3>Calculamos su valor</h3><p>Aplicamos los precios de mercado de tu municipio y ajustamos por tipo, estado, superficie y extras.</p></div>
+        <div class="v-paso-info aparecer"><h3>Recíbela al momento</h3><p>Te mostramos una horquilla de precio y te la enviamos por email. Si quieres, la afinamos visitando tu casa.</p></div>
       </div>
     </div>
   </section>
@@ -164,8 +167,9 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
       <div class="h-cabecera centrada aparecer"><p class="h-eyebrow oscuro">Preguntas frecuentes</p><h2 class="titulo">Lo que suelen preguntarnos</h2></div>
       <div class="v-faq">
         <details><summary>¿La valoración es realmente gratis?</summary><p>Sí. No tiene coste ni te compromete a nada. Es nuestra forma de conocerte y de ayudarte a tomar una buena decisión.</p></details>
-        <details><summary>¿En cuánto tiempo la recibo?</summary><p>Normalmente en 24–48 horas. Si necesitamos algún dato más, te llamamos antes para no hacerte perder el tiempo.</p></details>
-        <details><summary>¿Cómo calculáis el precio?</summary><p>Con nuestro conocimiento del mercado de la sierra: ventas recientes de viviendas parecidas, la demanda actual de tu zona y las características concretas de tu casa.</p></details>
+        <details><summary>¿En cuánto tiempo la recibo?</summary><p>La valoración orientativa, al momento: la ves en pantalla y te llega por email. Si quieres un precio ajustado, te llamamos en 24–48 horas para ver la vivienda.</p></details>
+        <details><summary>¿Cómo calculáis el precio?</summary><p>Partimos del precio medio por m² de tu municipio y lo ajustamos según el tipo de vivienda, su estado, la superficie, la parcela y los extras. Por eso te damos una horquilla y no un precio cerrado.</p></details>
+        <details><summary>¿Es una tasación oficial?</summary><p>No. Es una valoración orientativa de mercado. Las tasaciones oficiales (por ejemplo, para pedir una hipoteca) solo pueden hacerlas sociedades de tasación homologadas por el Banco de España.</p></details>
         <details><summary>¿Tengo que vender con vosotros después?</summary><p>No. Puedes usar la valoración como quieras. Si decides vender o alquilar, estaremos encantados de ayudarte.</p></details>
         <details><summary>¿Qué hacéis con mis datos?</summary><p>Solo los usamos para preparar tu valoración y contactarte. No los compartimos con nadie. Más información en nuestra <a href="privacidad.html">política de privacidad</a>.</p></details>
       </div>
@@ -211,7 +215,11 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
     saber: '<path d="M11 18h2v-2h-2zm1-16a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a4 4 0 0 1 4 4c0 2.5-3 2.8-3 5h-2c0-3.3 3-3.1 3-5a2 2 0 0 0-4 0H8a4 4 0 0 1 4-4z"/>',
   };
   const svg = (k) => `<span class="v-ic"><svg viewBox="0 0 24 24">${ICON[k]}</svg></span>`;
-  const MUNICIPIOS = ["Los Molinos", "Guadarrama", "Cercedilla", "Collado Mediano", "Alpedrete", "Moralzarzal", "Becerril de la Sierra", "Navacerrada", "Collado Villalba", "El Escorial", "San Lorenzo de El Escorial", "Otro"];
+  const MUNICIPIOS_BASE = ["Los Molinos", "Guadarrama", "Cercedilla", "Collado Mediano", "Alpedrete", "Moralzarzal", "Becerril de la Sierra", "Navacerrada", "Collado Villalba", "El Escorial", "San Lorenzo de El Escorial"];
+  const municipios = () => {
+    const l = ((CONFIG.valoracion || {}).municipios || []).map((m) => m.nombre).filter(Boolean);
+    return [...(l.length ? l : MUNICIPIOS_BASE), "Otro"];
+  };
   const EXTRAS = ["Piscina", "Jardín", "Garaje", "Terraza", "Trastero", "Chimenea", "Calefacción", "Aire acondicionado", "Ascensor", "Vistas"];
 
   const D = { hab: 3, banos: 2, extras: [] };
@@ -222,7 +230,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
     { id: "dir", titulo: "¿Dónde está tu vivienda?", ayuda: "La ubicación es lo que más influye en el precio.",
       html: () => `
         <div class="v-campo"><label for="f-dir">Dirección</label><input id="f-dir" type="text" autocomplete="street-address" placeholder="Calle y número" value="${esc(D.dir || "")}"></div>
-        <div class="v-campo"><label for="f-mun">Municipio</label><select id="f-mun"><option value="">Elige tu municipio</option>${MUNICIPIOS.map((m) => `<option ${m === D.mun ? "selected" : ""}>${m}</option>`).join("")}</select></div>`,
+        <div class="v-campo"><label for="f-mun">Municipio</label><select id="f-mun"><option value="">Elige tu municipio</option>${municipios().map((m) => `<option ${m === D.mun ? "selected" : ""}>${m}</option>`).join("")}</select></div>`,
       leer: () => { D.dir = val("#f-dir"); D.mun = val("#f-mun"); },
       ok: () => D.dir && D.mun },
     { id: "tipo", titulo: "¿Qué tipo de vivienda es?", ayuda: "Así la comparamos con las ventas más parecidas.",
@@ -254,7 +262,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
         <div class="v-opciones">${[["Vender", "vender"], ["Alquilar", "alquilar"], ["Solo saber su valor", "saber"]].map(([t, i]) => `<button type="button" class="v-opcion ${D.objetivo === t ? "activa" : ""}" data-objetivo="${t}">${svg(i)}${t}</button>`).join("")}</div>
         ${D.objetivo && D.objetivo !== "Solo saber su valor" ? `<div class="v-sub"><label>¿Para cuándo?</label><div class="v-chips">${["Lo antes posible", "En 3–6 meses", "Más adelante"].map((s) => `<button type="button" class="v-chip ${D.plazo === s ? "activa" : ""}" data-plazo="${s}">${s}</button>`).join("")}</div></div>` : ""}`,
       ok: () => D.objetivo && (D.objetivo === "Solo saber su valor" || D.plazo) },
-    { id: "contacto", titulo: "¿Dónde te enviamos la valoración?", ayuda: "Te contactaremos en 24–48 horas con el resultado.",
+    { id: "contacto", titulo: "¿Dónde te enviamos la valoración?", ayuda: "Verás tu valoración orientativa al momento y te la enviaremos también por email.",
       html: () => `
         <div class="v-campo"><label for="f-nombre">Nombre y apellidos</label><input id="f-nombre" type="text" autocomplete="name" value="${esc(D.nombre || "")}"></div>
         <div class="v-dos">
@@ -337,6 +345,28 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
   $("#v-inicio").addEventListener("submit", (e) => { e.preventDefault(); entrar(val("#v-dir-inicio")); });
   $("#v-empezar-2").addEventListener("click", () => entrar());
 
+  /* Valoración orientativa: precio medio por m² del municipio (editable en el panel) ajustado por tipo, estado, tamaño y extras.
+     La misma fórmula está en el Apps Script, que es quien envía el email. */
+  const eur = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
+  function estimar() {
+    const V = CONFIG.valoracion || {};
+    if (V.activa === false || sinCasa() || !D.m2) return null;
+    const m = (V.municipios || []).find((x) => x.nombre === D.mun);
+    if (!m) return null;
+    const esPiso = D.tipo === "Piso" || D.tipo === "Ático o dúplex";
+    const base = Number(esPiso ? m.piso : m.casa) || Number(esPiso ? m.casa : m.piso);
+    if (!base) return null;
+    let f = D.tipo === "Ático o dúplex" ? 1.08 : D.tipo === "Piso" ? 1 : ({ Independiente: 1.05, Pareada: 1, Adosada: 0.95 }[D.subtipo] || 1);
+    f *= { "A estrenar o reformada": 1.1, "Buen estado": 1, "Necesita reforma": 0.85 }[D.estado] || 1;
+    if (esPiso) { if (D.m2 < 60) f *= 1.05; } else f *= D.m2 > 300 ? 0.9 : D.m2 > 220 ? 0.95 : 1;
+    const EX = { Piscina: 0.03, Garaje: 0.02, Terraza: 0.01, Trastero: 0.01, Vistas: 0.02, "Aire acondicionado": 0.01, Ascensor: esPiso ? 0.02 : 0, Jardín: esPiso ? 0.02 : 0 };
+    f *= 1 + Math.min(0.1, D.extras.reduce((s, x) => s + (EX[x] || 0), 0));
+    if (!esPiso && D.parcela) { const r = D.parcela / D.m2; f *= r >= 5 ? 1.05 : r >= 3 ? 1.02 : 1; }
+    const c = D.m2 * base * f, mg = Math.min(0.2, Math.max(0.03, (Number(V.margen) || 8) / 100));
+    const r5 = (n) => Math.round(n / 5000) * 5000;
+    return { min: r5(c * (1 - mg)), max: r5(c * (1 + mg)) };
+  }
+
   /* Envío: mismo sistema que el resto de formularios (hoja de Google + aviso por email + panel) */
   async function enviar() {
     const b = $("#v-siguiente"), err = $("#v-error");
@@ -378,6 +408,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
     }
   }
   function gracias() {
+    const est = estimar();
     $("#v-barra").style.width = "100%";
     $("#v-contador-pasos").textContent = "¡Listo!";
     $("#v-atras").style.visibility = "hidden";
@@ -385,7 +416,9 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
     $("#v-panel").innerHTML = `<div class="v-paso v-gracias">
       <div class="v-ok"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
       <h2>¡Gracias${nombre ? ", " + esc(nombre) : ""}!</h2>
-      <p>Hemos recibido los datos de tu vivienda. Te contactaremos en 24–48 horas con tu valoración.</p>
+      ${est ? `<div class="v-valor"><small>Valor orientativo de tu vivienda</small><strong>${eur(est.min)} – ${eur(est.max)}</strong></div>
+      <p>Te lo hemos enviado también a <b>${esc(D.email)}</b>. Es una estimación a partir de precios de mercado de tu zona, no una tasación oficial. Si quieres afinarla, te llamamos para verla sin compromiso.</p>`
+      : `<p>Hemos recibido los datos de tu vivienda. Te contactaremos en 24–48 horas con una valoración personalizada.</p>`}
       <div class="v-resumen"><b>${esc([D.tipo, D.subtipo].filter(Boolean).join(" · "))}</b> en ${esc(D.mun || "")}<br>
         ${D.m2 ? D.m2 + " m² construidos" : ""}${D.parcela ? (D.m2 ? " · " : "") + D.parcela + " m² de parcela" : ""}${sinCasa() ? "" : ` · ${D.hab} hab. · ${D.banos} baños`}</div>
       <div class="v-botones">
