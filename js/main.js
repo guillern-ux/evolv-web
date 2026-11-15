@@ -99,6 +99,15 @@ function pintarListado(lista, contenedorId, esAlquiler = false) {
   // Rellenar zonas automáticamente
   [...new Set(lista.map((p) => p.zona))].forEach((z) => selZona.insertAdjacentHTML("beforeend", `<option>${z}</option>`));
 
+  // Filtros que llegan desde el buscador de la portada (?zona=…&hab=…)
+  const qs = new URLSearchParams(location.search);
+  if (qs.get("zona")) selZona.value = qs.get("zona");
+  const h = qs.get("hab");
+  if (h && /^\d+$/.test(h)) {
+    if (![...selHab.options].some((o) => o.value === h)) selHab.insertAdjacentHTML("beforeend", `<option value="${h}">${h}+</option>`);
+    selHab.value = h;
+  }
+
   function render() {
     let res = lista.filter(
       (p) => (!selZona.value || p.zona === selZona.value) && (!selHab.value || p.hab >= +selHab.value)
