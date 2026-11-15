@@ -5,3 +5,5 @@
 /my-bookings                  /reservar        301
 /pol%C3%ADtica-de-privacidad  /privacidad      301
 /política-de-privacidad       /privacidad      301
+/panel                        /                302
+/panel/*                      /                302
