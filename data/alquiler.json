@@ -1,0 +1,52 @@
+[
+  {
+    "nombre": "Plaza Barbeto",
+    "zona": "Zona Centro",
+    "hab": 6,
+    "banos": 2,
+    "m2": 600,
+    "precio": 1200,
+    "img": "/img/plaza-dolores.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Centro Magno",
+    "zona": "Zona Centro",
+    "hab": 5,
+    "banos": 5,
+    "m2": 470,
+    "precio": 1520,
+    "img": "/img/la-perla.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Edificio Gambo",
+    "zona": "Zona Centro",
+    "hab": 6,
+    "banos": 6,
+    "m2": 590,
+    "precio": 7500,
+    "img": "/img/centro-colon.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Chalet",
+    "zona": "Luz Sierra",
+    "hab": 4,
+    "banos": 3,
+    "m2": 425,
+    "precio": 2500,
+    "img": "/img/edificio-banquero.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Plaza Franco",
+    "zona": "Zona Centro",
+    "hab": 6,
+    "banos": 1,
+    "m2": 610,
+    "precio": 1890,
+    "img": "/img/plaza-loreto.jpg",
+    "visible": true
+  }
+]

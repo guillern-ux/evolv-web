@@ -1,0 +1,72 @@
+[
+  {
+    "nombre": "Chalet",
+    "zona": "Los Molinos",
+    "hab": 5,
+    "banos": 3,
+    "m2": 450,
+    "precio": 515000,
+    "img": "/img/chalet-los-molinos.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Plaza Loreto",
+    "zona": "Zona Centro",
+    "hab": 6,
+    "banos": 3,
+    "m2": 520,
+    "precio": 1290050,
+    "img": "/img/plaza-loreto.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Plaza Dolores",
+    "zona": "Zona Centro",
+    "hab": 6,
+    "banos": 4,
+    "m2": 670,
+    "precio": 3450000,
+    "img": "/img/plaza-dolores.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "La Perla",
+    "zona": "Zona Centro",
+    "hab": 5,
+    "banos": 5,
+    "m2": 440,
+    "precio": 3325500,
+    "img": "/img/la-perla.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Centro Colón",
+    "zona": "Zona Centro",
+    "hab": 5,
+    "banos": 4,
+    "m2": 450,
+    "precio": 5555000,
+    "img": "/img/centro-colon.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Edificio SASS",
+    "zona": "Zona Centro",
+    "hab": 3,
+    "banos": 2,
+    "m2": 800,
+    "precio": 4450000,
+    "img": "/img/edificio-sass.jpg",
+    "visible": true
+  },
+  {
+    "nombre": "Edificio Banquero",
+    "zona": "Zona Centro",
+    "hab": 7,
+    "banos": 2,
+    "m2": 780,
+    "precio": 3325500,
+    "img": "/img/edificio-banquero.jpg",
+    "visible": true
+  }
+]
