@@ -396,7 +396,8 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
   }
 
   listo.then(() => {
-    const foto = IMAGENES.portada || (VENTA[0] && VENTA[0].img);
+    const casa = VENTA.find((p) => p.destacada && p.img) || VENTA.find((p) => p.img);
+    const foto = (casa && casa.img) || IMAGENES.portada;
     if (foto) $("#v-foto").style.backgroundImage = `url('${foto}')`;
     if (location.hash === "#valorar") entrar();
     observarAparicion();
