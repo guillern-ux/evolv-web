@@ -125,7 +125,7 @@ a { color: inherit; }
 .texto-legal ul { padding-left: 1.3rem; }
 
 /* ---- WhatsApp flotante ---- */
-.whatsapp { position: fixed; right: 22px; bottom: 22px; width: 58px; height: 58px; border-radius: 50%; background: #25d366; display: grid; place-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.2); z-index: 60; transition: transform .2s; }
+.whatsapp { position: fixed; right: 22px; bottom: 22px; width: 58px; height: 58px; border-radius: 50%; background: var(--morado); border: 2px solid rgba(255,255,255,.85); display: grid; place-items: center; box-shadow: 0 6px 20px rgba(40,26,57,.25); z-index: 60; transition: transform .2s; }
 .whatsapp:hover { transform: scale(1.08); }
 .whatsapp svg { width: 30px; height: 30px; fill: #fff; }
 
@@ -172,8 +172,7 @@ a { color: inherit; }
 .precio.grande { font-size: 2rem; }
 .acciones { display: grid; gap: .7rem; margin-top: 1.5rem; }
 .acciones .boton { text-align: center; }
-.boton-wa { background: #25d366; border-color: #25d366; }
-.boton-wa:hover { color: #1a8f45 !important; }
+.boton-wa { background: var(--morado); border-color: var(--morado); }
 .boton-borde { background: transparent; color: var(--morado) !important; }
 .boton-borde:hover { background: var(--morado); color: #fff !important; }
 .aviso-cerrada { background: #fbeef0; color: #8a1c2b; padding: .9rem 1rem; border-radius: 10px; font-weight: 700; margin-top: 1rem; }
@@ -190,9 +189,9 @@ a { color: inherit; }
    PORTADA (rediseño)
    ========================================================= */
 .home .cabecera { background: rgba(246,246,246,.96); }
-.h-eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 800; color: var(--celeste); margin-bottom: .8rem; }
+.h-eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; font-weight: 700; color: rgba(255,255,255,.75); margin-bottom: .8rem; }
 .h-eyebrow.oscuro { color: var(--morado-medio); }
-.oscura .h-eyebrow { color: var(--celeste); }
+.oscura .h-eyebrow { color: rgba(255,255,255,.6); }
 
 /* Hero */
 .h-hero { position: relative; min-height: calc(100vh - 76px); display: flex; align-items: center; background: var(--morado) center 65% / cover no-repeat; color: #fff; padding: 5rem 0 4rem; }
@@ -258,8 +257,8 @@ a { color: inherit; }
 .h-cta h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.15; }
 .h-cta p { color: var(--lavanda); margin-top: .5rem; font-size: 1.08rem; }
 .h-cta-botones { display: flex; gap: .8rem; flex-wrap: wrap; }
-.h-boton-wa { background: #25d366; border-color: #25d366; }
-.h-boton-wa:hover { background: transparent; color: #fff !important; border-color: #fff; }
+.h-boton-wa { background: transparent; border-color: rgba(255,255,255,.6); color: #fff !important; }
+.h-boton-wa:hover { background: #fff; color: var(--morado) !important; border-color: #fff; }
 
 @media (max-width: 1000px) {
   .h-rejilla, .h-servicios { grid-template-columns: 1fr 1fr; }
