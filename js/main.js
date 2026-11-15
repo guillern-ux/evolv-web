@@ -53,6 +53,7 @@ function pintarPie() {
             <li><a href="vender.html">Vender</a></li>
             <li><a href="reservar.html">Reserva online</a></li>
             <li><a href="privacidad.html">Política de Privacidad</a></li>
+            <li><a href="aviso-legal.html">Aviso legal</a></li>
           </ul>
         </div>
         <div>
@@ -104,14 +105,18 @@ function pintarListado(lista, contenedorId, esAlquiler = false) {
     );
     if (selOrden.value === "asc") res = [...res].sort((a, b) => a.precio - b.precio);
     if (selOrden.value === "desc") res = [...res].sort((a, b) => b.precio - a.precio);
+    res = [...res].sort((a, b) => (a.estado === "Vendida" || a.estado === "Alquilada") - (b.estado === "Vendida" || b.estado === "Alquilada"));
 
     cont.innerHTML = res.length
       ? res.map((p) => `
         <article class="tarjeta aparecer">
-          <img src="${p.img}" alt="${p.nombre} — ${p.zona}" loading="lazy">
+          <a class="tarjeta-foto" href="casa.html?tipo=${p.tipo}&id=${p.id}">
+            <img src="${esc(p.img)}" alt="${esc(p.nombre)} — ${esc(p.zona)}" loading="lazy">
+            ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
+          </a>
           <div class="tarjeta-cuerpo">
-            <h3>${p.nombre}</h3>
-            <span class="zona">${p.zona}</span>
+            <h3><a href="casa.html?tipo=${p.tipo}&id=${p.id}">${esc(p.nombre)}</a></h3>
+            <span class="zona">${esc(p.zona)}</span>
             <div class="datos">
               <div><small>Habitaciones</small><strong>${p.hab}</strong></div>
               <div><small>Baños</small><strong>${p.banos}</strong></div>
@@ -119,7 +124,7 @@ function pintarListado(lista, contenedorId, esAlquiler = false) {
             </div>
             <div class="precio-fila">
               <span class="precio">${euros(p.precio)}${esAlquiler ? " <small>/mes</small>" : ""}</span>
-              <a class="enlace-visita" href="reservar.html?inmueble=${encodeURIComponent(p.nombre + " (" + p.zona + ")")}">Solicitar visita →</a>
+              <a class="enlace-visita" href="casa.html?tipo=${p.tipo}&id=${p.id}">Ver casa →</a>
             </div>
           </div>
         </article>`).join("")
