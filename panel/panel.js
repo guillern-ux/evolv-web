@@ -447,6 +447,7 @@ function vCasas() {
       <div class="casa" data-acc="editarCasa" data-i="${i}">
         <div class="foto">${p.img ? `<img src="${esc(fotoURL(p.img))}" alt="" loading="lazy">` : ""}
           <span class="chip ${clase(p.estado || "Disponible")}">${esc(p.estado || "Disponible")}</span>
+          ${p.destacada ? '<span class="destacada-marca" title="Destacada en la portada">★ Destacada</span>' : ""}
           ${p.visible === false ? '<div class="oculta-marca">Oculta en la web</div>' : ""}</div>
         <div class="info"><h3>${esc(p.nombre)}</h3><div class="zona">${esc(p.zona)}</div>
           <div class="linea"><span class="precio">${euros(p.precio)}${S.tab === "alquiler" ? "<small>/mes</small>" : ""}</span>
@@ -481,6 +482,8 @@ function pintarModalCasa() {
         <div><label>Ubicación para el mapa</label><input type="text" id="c-ubic" value="${esc(p.ubicacion || "")}" placeholder="Calle o pueblo (opcional)"></div>
         <div class="completo"><label>Descripción</label><textarea id="c-desc" placeholder="Cuenta lo mejor de la casa. Cada párrafo en una línea.">${esc(p.descripcion || "")}</textarea></div>
         <div class="completo"><label class="interruptor"><input type="checkbox" id="c-visible" ${p.visible !== false ? "checked" : ""}> Mostrar en la web</label></div>
+        <div class="completo"><label class="interruptor"><input type="checkbox" id="c-destacada" ${p.destacada ? "checked" : ""}> ★ Destacar en la portada</label>
+          <small class="ayuda">Las casas destacadas salen en el carrusel de la página principal. Si no destacas ninguna, salen todas.</small></div>
         <div class="completo"><label>Fotos (la primera es la principal)</label>
           <div class="fotos-editor">
             ${EDIT.fotos.map((f, k) => `<div class="foto-item ${k === 0 ? "principal" : ""}"><img src="${esc(fotoURL(f))}" alt="">
@@ -507,7 +510,7 @@ function leerFormCasa() {
   Object.assign(EDIT.casa, {
     nombre: $("#c-nombre").value.trim(), zona: $("#c-zona").value.trim(), precio: num("#c-precio"),
     estado: $("#c-estado").value, hab: num("#c-hab"), banos: num("#c-banos"), m2: num("#c-m2"),
-    ubicacion: $("#c-ubic").value.trim(), descripcion: $("#c-desc").value, visible: $("#c-visible").checked,
+    ubicacion: $("#c-ubic").value.trim(), descripcion: $("#c-desc").value, visible: $("#c-visible").checked, destacada: $("#c-destacada").checked,
   });
 }
 
