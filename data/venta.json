@@ -7,7 +7,11 @@
     "m2": 450,
     "precio": 515000,
     "img": "/img/chalet-los-molinos.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   },
   {
     "nombre": "Plaza Loreto",
@@ -17,7 +21,11 @@
     "m2": 520,
     "precio": 1290050,
     "img": "/img/plaza-loreto.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   },
   {
     "nombre": "Plaza Dolores",
@@ -27,7 +35,11 @@
     "m2": 670,
     "precio": 3450000,
     "img": "/img/plaza-dolores.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   },
   {
     "nombre": "La Perla",
@@ -37,7 +49,11 @@
     "m2": 440,
     "precio": 3325500,
     "img": "/img/la-perla.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   },
   {
     "nombre": "Centro Colón",
@@ -47,7 +63,11 @@
     "m2": 450,
     "precio": 5555000,
     "img": "/img/centro-colon.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   },
   {
     "nombre": "Edificio SASS",
@@ -57,7 +77,11 @@
     "m2": 800,
     "precio": 4450000,
     "img": "/img/edificio-sass.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   },
   {
     "nombre": "Edificio Banquero",
@@ -67,6 +91,10 @@
     "m2": 780,
     "precio": 3325500,
     "img": "/img/edificio-banquero.jpg",
-    "visible": true
+    "visible": true,
+    "estado": "Disponible",
+    "descripcion": "",
+    "galeria": [],
+    "ubicacion": ""
   }
 ]
