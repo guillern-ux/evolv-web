@@ -115,7 +115,12 @@
         <div><p class="h-eyebrow oscuro">En alquiler</p><h2 class="titulo">Viviendas para alquilar</h2></div>
         <a class="h-ver-todo" href="alquilar.html">Ver todas las casas en alquiler →</a>
       </div>
-      <div class="rejilla h-rejilla" id="lista-alquiler"></div>
+      <div class="h-carrusel aparecer" id="carrusel-alquiler">
+        <div class="h-pista" id="lista-alquiler" tabindex="0" aria-label="Viviendas destacadas en alquiler"></div>
+        <button type="button" class="h-flecha prev" aria-label="Viviendas anteriores"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></svg></button>
+        <button type="button" class="h-flecha next" aria-label="Más viviendas"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+      </div>
+      <div class="h-puntos" id="puntos-alquiler"></div>
     </div>
   </section>
 
@@ -174,7 +179,11 @@ listo.then(() => {
 
   /* Tarjetas de casas */
   const orden = { Novedad: 0, Disponible: 1, Reservada: 2, Vendida: 3, Alquilada: 3 };
-  const destacar = (lista, n = 3) => [...lista].sort((a, b) => (orden[a.estado] ?? 1) - (orden[b.estado] ?? 1)).slice(0, n);
+  // Si en el panel se han marcado casas como destacadas, salen solo esas; si no, todas.
+  const destacar = (lista, n = 3) => {
+    const marcadas = lista.filter((p) => p.destacada);
+    return [...(marcadas.length ? marcadas : lista)].sort((a, b) => (orden[a.estado] ?? 1) - (orden[b.estado] ?? 1)).slice(0, n);
+  };
   const tarjeta = (p, alq, anim = true) => `
     <article class="tarjeta${anim ? " aparecer" : ""}">
       <a class="tarjeta-foto" href="casa.html?tipo=${p.tipo}&id=${p.id}">
@@ -202,8 +211,8 @@ listo.then(() => {
     el.innerHTML = d.map((p) => tarjeta(p, alq, anim)).join("");
     return true;
   };
-  if (pintar("lista-venta", VENTA, false, "destacadas", 10, false)) carrusel(document.getElementById("carrusel-venta"), document.getElementById("puntos-venta"));
-  pintar("lista-alquiler", ALQUILER, true, "seccion-alquiler");
+  if (pintar("lista-venta", VENTA, false, "destacadas", 12, false)) carrusel(document.getElementById("carrusel-venta"), document.getElementById("puntos-venta"));
+  if (pintar("lista-alquiler", ALQUILER, true, "seccion-alquiler", 12, false)) carrusel(document.getElementById("carrusel-alquiler"), document.getElementById("puntos-alquiler"));
 
   /* Opiniones */
   if (!TESTIMONIOS.length) document.getElementById("opiniones").remove();

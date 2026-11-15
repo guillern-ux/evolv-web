@@ -38,6 +38,10 @@ content:
         label: Mostrar en la web
         type: boolean
         default: true
+      - name: destacada
+        label: Destacar en la portada
+        type: boolean
+        default: false
       - name: estado
         label: Estado
         type: select
@@ -90,6 +94,10 @@ content:
         label: Mostrar en la web
         type: boolean
         default: true
+      - name: destacada
+        label: Destacar en la portada
+        type: boolean
+        default: false
       - name: estado
         label: Estado
         type: select
