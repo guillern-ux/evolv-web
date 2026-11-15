@@ -246,6 +246,7 @@ const nombreMsj = (m) => [m.Nombre, m.Apellido].filter(Boolean).join(" ") || m.e
 function tipoMsj(m) {
   const f = (m.Formulario || "").toLowerCase();
   if (f.includes("visita")) return "Visita";
+  if (f.includes("valoraci")) return "Valoración";
   if (f.includes("propiedad") || f.includes("vender")) return "Propietario";
   if (f.includes("prueba")) return "Prueba";
   return "Contacto";
@@ -263,7 +264,7 @@ function filtrarMensajes() {
   return S.mensajes.filter((m) => {
     const t = tipoMsj(m), e = m.Estado || "Nuevo";
     const okF = S.filtro === "todos" || (S.filtro === "nuevos" && e === "Nuevo") || (S.filtro === "cerrados" && e === "Cerrado") ||
-      (S.filtro === "visitas" && t === "Visita") || (S.filtro === "propietarios" && t === "Propietario") || (S.filtro === "contacto" && t === "Contacto");
+      (S.filtro === "visitas" && t === "Visita") || (S.filtro === "propietarios" && (t === "Propietario" || t === "Valoración")) || (S.filtro === "contacto" && t === "Contacto");
     return okF && (!q || Object.values(m).join(" ").toLowerCase().includes(q));
   });
 }
