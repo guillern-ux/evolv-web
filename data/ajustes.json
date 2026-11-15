@@ -13,5 +13,67 @@
   "formularioUrl": "https://script.google.com/macros/s/AKfycbwGR2L7koNY9z5eOSg63YuxVTuKIkSATXEIQ0PBzcdvedY35DwqhAYNIMNclJunNoVx/exec",
   "portada": "/img/portada.jpg",
   "imagenComprar": "/img/comprar-vivienda.jpg",
-  "testimonios": []
+  "testimonios": [],
+  "valoracion": {
+    "activa": true,
+    "margen": 8,
+    "fuente": "RealAdvisor, precio mediano por m² de julio–agosto de 2026",
+    "municipios": [
+      {
+        "nombre": "Los Molinos",
+        "piso": 2172,
+        "casa": 2126
+      },
+      {
+        "nombre": "Guadarrama",
+        "piso": 2288,
+        "casa": 2077
+      },
+      {
+        "nombre": "Cercedilla",
+        "piso": 2423,
+        "casa": 2144
+      },
+      {
+        "nombre": "Collado Mediano",
+        "piso": 2256,
+        "casa": 1863
+      },
+      {
+        "nombre": "Alpedrete",
+        "piso": 2346,
+        "casa": 2200
+      },
+      {
+        "nombre": "Moralzarzal",
+        "piso": 2571,
+        "casa": 2361
+      },
+      {
+        "nombre": "Becerril de la Sierra",
+        "piso": 2678,
+        "casa": 2208
+      },
+      {
+        "nombre": "Navacerrada",
+        "piso": 2454,
+        "casa": 2785
+      },
+      {
+        "nombre": "Collado Villalba",
+        "piso": 2298,
+        "casa": 2108
+      },
+      {
+        "nombre": "El Escorial",
+        "piso": 2360,
+        "casa": 2375
+      },
+      {
+        "nombre": "San Lorenzo de El Escorial",
+        "piso": 2743,
+        "casa": 2588
+      }
+    ]
+  }
 }
