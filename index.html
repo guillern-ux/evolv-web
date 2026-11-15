@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/styles.css?v=5">
+<link rel="stylesheet" href="/css/styles.css?v=6">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 </head>
 <body class="home">
@@ -52,7 +52,12 @@
         <div><p class="h-eyebrow oscuro">En venta</p><h2 class="titulo">Casas destacadas</h2></div>
         <a class="h-ver-todo" href="comprar.html">Ver todas las casas en venta →</a>
       </div>
-      <div class="rejilla h-rejilla" id="lista-venta"></div>
+      <div class="h-carrusel aparecer" id="carrusel-venta">
+        <div class="h-pista" id="lista-venta" tabindex="0" aria-label="Casas destacadas en venta"></div>
+        <button type="button" class="h-flecha prev" aria-label="Casas anteriores"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></svg></button>
+        <button type="button" class="h-flecha next" aria-label="Más casas"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+      </div>
+      <div class="h-puntos" id="puntos-venta"></div>
     </div>
   </section>
 
@@ -169,9 +174,9 @@ listo.then(() => {
 
   /* Tarjetas de casas */
   const orden = { Novedad: 0, Disponible: 1, Reservada: 2, Vendida: 3, Alquilada: 3 };
-  const destacar = (lista) => [...lista].sort((a, b) => (orden[a.estado] ?? 1) - (orden[b.estado] ?? 1)).slice(0, 3);
-  const tarjeta = (p, alq) => `
-    <article class="tarjeta aparecer">
+  const destacar = (lista, n = 3) => [...lista].sort((a, b) => (orden[a.estado] ?? 1) - (orden[b.estado] ?? 1)).slice(0, n);
+  const tarjeta = (p, alq, anim = true) => `
+    <article class="tarjeta${anim ? " aparecer" : ""}">
       <a class="tarjeta-foto" href="casa.html?tipo=${p.tipo}&id=${p.id}">
         <img src="${esc(p.img)}" alt="${esc(p.nombre)} en ${esc(p.zona)}" loading="lazy">
         ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
@@ -190,13 +195,14 @@ listo.then(() => {
         </div>
       </div>
     </article>`;
-  const pintar = (id, lista, alq, seccion) => {
+  const pintar = (id, lista, alq, seccion, n = 3, anim = true) => {
     const el = document.getElementById(id);
-    const d = destacar(lista);
-    if (!d.length) { document.getElementById(seccion)?.remove(); return; }
-    el.innerHTML = d.map((p) => tarjeta(p, alq)).join("");
+    const d = destacar(lista, n);
+    if (!d.length) { document.getElementById(seccion)?.remove(); return false; }
+    el.innerHTML = d.map((p) => tarjeta(p, alq, anim)).join("");
+    return true;
   };
-  pintar("lista-venta", VENTA, false, "destacadas");
+  if (pintar("lista-venta", VENTA, false, "destacadas", 10, false)) carrusel(document.getElementById("carrusel-venta"), document.getElementById("puntos-venta"));
   pintar("lista-alquiler", ALQUILER, true, "seccion-alquiler");
 
   /* Opiniones */
@@ -209,6 +215,44 @@ listo.then(() => {
 
   observarAparicion();
 });
+
+/* Carrusel (diapositivas) de casas destacadas */
+function carrusel(caja, puntos) {
+  const pista = caja.querySelector(".h-pista");
+  const prev = caja.querySelector(".prev"), next = caja.querySelector(".next");
+  const items = () => [...pista.children];
+  const paso = () => { const a = items(); return a.length > 1 ? a[1].offsetLeft - a[0].offsetLeft : pista.clientWidth; };
+  const porVista = () => Math.max(1, Math.round(pista.clientWidth / paso()));
+  const paginas = () => Math.max(1, Math.ceil(items().length / porVista()));
+  const maxScroll = () => pista.scrollWidth - pista.clientWidth;
+  const paginaActual = () => maxScroll() - pista.scrollLeft < 8 ? paginas() - 1 : Math.round(pista.scrollLeft / paso() / porVista());
+  const irA = (i) => { const n = paginas(); i = ((i % n) + n) % n; pista.scrollTo({ left: Math.min(i * porVista() * paso(), maxScroll()), behavior: "smooth" }); };
+  const pintarPuntos = () => {
+    const n = paginas();
+    puntos.innerHTML = n > 1 ? Array.from({ length: n }, (_, i) => `<button type="button" aria-label="Diapositiva ${i + 1}"></button>`).join("") : "";
+    [...puntos.children].forEach((b, i) => b.addEventListener("click", () => { parar(); irA(i); }));
+    actualizar();
+  };
+  const actualizar = () => {
+    const p = paginaActual(), unaSola = paginas() < 2;
+    [...puntos.children].forEach((b, i) => b.classList.toggle("activo", i === p));
+    prev.disabled = unaSola || pista.scrollLeft < 8;
+    next.disabled = unaSola || maxScroll() - pista.scrollLeft < 8;
+  };
+  let reloj = null, encima = false;
+  const parar = () => { clearInterval(reloj); reloj = null; };
+  prev.addEventListener("click", () => { parar(); irA(paginaActual() - 1); });
+  next.addEventListener("click", () => { parar(); irA(paginaActual() + 1); });
+  ["pointerdown", "wheel", "touchstart", "keydown"].forEach((ev) => pista.addEventListener(ev, parar, { passive: true }));
+  pista.addEventListener("scroll", () => requestAnimationFrame(actualizar), { passive: true });
+  caja.addEventListener("mouseenter", () => (encima = true));
+  caja.addEventListener("mouseleave", () => (encima = false));
+  let ancho = innerWidth;
+  addEventListener("resize", () => { if (innerWidth !== ancho) { ancho = innerWidth; pintarPuntos(); } });
+  pintarPuntos();
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches && paginas() > 1)
+    reloj = setInterval(() => { if (!encima && !document.hidden) irA(paginaActual() + 1); }, 5000);
+}
 </script>
 </body>
 </html>
