@@ -12,8 +12,8 @@
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <style>
 .r-tipo { display: inline-flex; background: var(--lavanda); border-radius: 999px; padding: .3rem; gap: .2rem; }
-.r-tipo label { margin: 0; cursor: pointer; }
-.r-tipo input { position: absolute; opacity: 0; pointer-events: none; }
+.r-tipo label { position: relative; margin: 0; cursor: pointer; }
+.r-tipo input { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .r-tipo span { display: block; padding: .55rem 1.4rem; border-radius: 999px; font-weight: 700; color: var(--morado-medio); transition: .2s; }
 .r-tipo input:checked + span { background: var(--morado); color: #fff; }
 .r-tipo input:focus-visible + span { outline: 2px solid var(--morado); outline-offset: 2px; }
