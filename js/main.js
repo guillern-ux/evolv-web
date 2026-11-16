@@ -21,7 +21,7 @@ function pintarCabecera() {
   const html = `
   <header class="cabecera">
     <div class="contenedor">
-      <a href="index.html" class="logo" aria-label="Inicio">EVOLV<span>Real Estate</span></a>
+      <a href="index.html" class="logo" aria-label="Evolv Real Estate, inicio">Ev<svg class="logo-o" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="currentColor"/><path d="M32 15 47 29H44V46H20V29H17Z" fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><rect x="27.5" y="32.5" width="9" height="9" rx="1.5" fill="currentColor"/></svg>lv</a>
       <button class="hamburguesa" aria-label="Abrir menú"><span></span><span></span><span></span></button>
       <ul class="menu">
         ${enlaces.map(([h, t]) => `<li><a href="${h}" class="${actual.startsWith(h.replace(".html","")) ? "activo" : ""}">${t}</a></li>`).join("")}
