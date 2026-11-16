@@ -486,6 +486,7 @@ function pintarModalCasa() {
         <div class="completo"><label class="interruptor"><input type="checkbox" id="c-destacada" ${p.destacada ? "checked" : ""}> ★ Destacar en la portada</label>
           <small class="ayuda">Las casas destacadas salen en el carrusel de la página principal. Si no destacas ninguna, salen todas.</small></div>
         <div class="completo"><label>Fotos (la primera es la principal)</label>
+          ${ed ? `<small class="ayuda" style="margin:0 0 .6rem">Puedes subir varias a la vez. Ordénalas con ◀ ▶ y elige la principal con ★. Todas salen en la galería de la casa.</small>` : ""}
           <div class="fotos-editor">
             ${EDIT.fotos.map((f, k) => `<div class="foto-item ${k === 0 ? "principal" : ""}"><img src="${esc(fotoURL(f))}" alt="">
               ${k === 0 ? '<span class="marca-p">Principal</span>' : ""}

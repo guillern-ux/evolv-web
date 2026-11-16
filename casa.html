@@ -8,17 +8,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/styles.css?v=4">
+<link rel="stylesheet" href="/css/styles.css?v=7">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 
-<main class="contenedor ficha" id="ficha">
+<main class="contenedor cf" id="ficha">
   <p class="vacio" style="padding:8rem 0">Cargando…</p>
 </main>
 
 <script src="/js/datos.js?v=3"></script>
-<script src="/js/main.js?v=4"></script>
+<script src="/js/main.js?v=5"></script>
 <script>
 listo.then(() => {
   const q = new URLSearchParams(location.search);
@@ -44,50 +44,87 @@ listo.then(() => {
   const mapa = `https://maps.google.com/maps?q=${encodeURIComponent((p.ubicacion || p.zona) + ", Madrid, España")}&z=13&output=embed`;
   const cerrada = p.estado === "Vendida" || p.estado === "Alquilada";
   const parrafos = (p.descripcion || "").split(/\n+/).filter(Boolean).map((t) => `<p>${esc(t)}</p>`).join("");
+  const fotos = p.fotos.length ? p.fotos : [""];
+  const N = fotos.length;
+  const FLECHA = (d) => `<svg viewBox="0 0 24 24"><path d="${d === "prev" ? "M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z" : "M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"}"/></svg>`;
 
   ficha.innerHTML = `
-    <a class="volver" href="${tipo === "alquiler" ? "alquilar" : "comprar"}.html">← Volver a ${esAlq ? "alquiler" : "venta"}</a>
-    <div class="ficha-rejilla">
-      <div class="galeria">
-        <div class="galeria-principal">
-          <img id="foto-grande" src="${esc(p.fotos[0] || "")}" alt="${esc(p.nombre)}">
-          ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
-        </div>
-        ${p.fotos.length > 1 ? `<div class="miniaturas">${p.fotos.map((f, i) =>
-          `<button type="button" class="${i === 0 ? "activa" : ""}" data-src="${esc(f)}" aria-label="Foto ${i + 1}"><img src="${esc(f)}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}
-      </div>
+    <a class="volver" href="${esAlq ? "alquilar" : "comprar"}.html">← Volver a ${esAlq ? "alquiler" : "venta"}</a>
 
-      <aside class="ficha-info">
-        <span class="zona">${esc(p.zona)}</span>
-        <h1 class="titulo">${esc(p.nombre)}</h1>
-        <p class="precio grande">${euros(p.precio)}${esAlq ? " <small>/mes</small>" : ""}</p>
-        <div class="datos">
-          <div><small>Habitaciones</small><strong>${p.hab ?? "—"}</strong></div>
-          <div><small>Baños</small><strong>${p.banos ?? "—"}</strong></div>
-          <div><small>m²</small><strong>${p.m2 ?? "—"}</strong></div>
-        </div>
+    <div class="cf-gal">
+      <div class="cf-galeria n${Math.min(N, 5)}" id="cf-galeria">
+        ${fotos.map((f, i) => `<button type="button" class="cf-foto" data-i="${i}" aria-label="Ver foto ${i + 1} de ${N}">
+          <img src="${esc(f)}" alt="${esc(p.nombre)}, foto ${i + 1}" ${i > 4 ? 'loading="lazy"' : ""}></button>`).join("")}
+      </div>
+      ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
+      ${N > 1 ? `<button type="button" class="cf-vertodas" data-i="0">${icono("rejilla")}Ver las ${N} fotos</button>
+      <span class="cf-contador" id="cf-contador">1 / ${N}</span>` : ""}
+    </div>
+
+    <div class="cf-rejilla">
+      <div class="cf-cab">
+        <p class="cf-zona">${icono("pin")}${esc(p.zona)}</p>
+        <h1>${esc(p.nombre)}</h1>
+      </div>
+      ${datosCasa(p, "cf-datos")}
+      <aside class="cf-contacto">
+        <p class="cf-precio">${euros(p.precio)}${esAlq ? " <small>/mes</small>" : ""}</p>
         ${cerrada ? `<p class="aviso-cerrada">Este inmueble ya está ${p.estado.toLowerCase()}. Escríbenos y te avisamos de casas parecidas.</p>` : ""}
         <div class="acciones">
           ${cerrada ? "" : `<a class="boton" href="reservar.html?inmueble=${encodeURIComponent(nombreCompleto)}">Solicitar visita</a>`}
           <a class="boton boton-wa" href="${wa}" target="_blank" rel="noopener">WhatsApp</a>
           <a class="boton boton-borde" href="tel:${(CONFIG.telefono || "").replace(/\s/g, "")}">Llamar</a>
         </div>
+        <p class="cf-nota">Sin compromiso. Te atendemos personalmente.</p>
       </aside>
+      ${parrafos ? `<section class="ficha-texto"><h2>Descripción</h2>${parrafos}</section>` : ""}
+      <section class="ficha-mapa">
+        <h2>Ubicación aproximada</h2>
+        <iframe src="${mapa}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ${esc(p.zona)}"></iframe>
+      </section>
     </div>
 
-    ${parrafos ? `<section class="ficha-texto"><h2>Descripción</h2>${parrafos}</section>` : ""}
+    <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Fotos de ${esc(p.nombre)}">
+      <div class="lb-top"><span id="lb-n">1 / ${N}</span><button type="button" class="lb-cerrar" id="lb-cerrar" aria-label="Cerrar">×</button></div>
+      <div class="lb-pista" id="lb-pista">${fotos.map((f, i) => `<div class="lb-slide"><img src="${esc(f)}" alt="${esc(p.nombre)}, foto ${i + 1}" loading="lazy"></div>`).join("")}</div>
+      ${N > 1 ? `<button type="button" class="lb-flecha prev" id="lb-prev" aria-label="Foto anterior">${FLECHA("prev")}</button>
+      <button type="button" class="lb-flecha next" id="lb-next" aria-label="Foto siguiente">${FLECHA("next")}</button>` : ""}
+    </div>`;
 
-    <section class="ficha-mapa">
-      <h2>Ubicación aproximada</h2>
-      <iframe src="${mapa}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ${esc(p.zona)}"></iframe>
-    </section>`;
+  /* Galería: contador al deslizar (móvil) */
+  const gal = document.getElementById("cf-galeria");
+  const cont = document.getElementById("cf-contador");
+  if (cont) gal.addEventListener("scroll", () => { cont.textContent = `${Math.round(gal.scrollLeft / gal.clientWidth) + 1} / ${N}`; }, { passive: true });
 
-  ficha.querySelectorAll(".miniaturas button").forEach((b) =>
-    b.addEventListener("click", () => {
-      document.getElementById("foto-grande").src = b.dataset.src;
-      ficha.querySelectorAll(".miniaturas button").forEach((x) => x.classList.toggle("activa", x === b));
-    })
-  );
+  /* Visor a pantalla completa */
+  const lb = document.getElementById("lb"), pista = document.getElementById("lb-pista"), lbN = document.getElementById("lb-n");
+  const prev = document.getElementById("lb-prev"), next = document.getElementById("lb-next");
+  let volverA = null;
+  const actual = () => Math.round(pista.scrollLeft / Math.max(1, pista.clientWidth));
+  const marcar = () => {
+    const i = actual();
+    lbN.textContent = `${i + 1} / ${N}`;
+    if (prev) { prev.disabled = i === 0; next.disabled = i === N - 1; }
+  };
+  const abrir = (i) => {
+    volverA = document.activeElement;
+    lb.hidden = false; document.body.style.overflow = "hidden";
+    pista.scrollTo({ left: i * pista.clientWidth, behavior: "instant" });
+    marcar(); document.getElementById("lb-cerrar").focus();
+  };
+  const cerrar = () => { lb.hidden = true; document.body.style.overflow = ""; if (volverA) volverA.focus(); };
+  const ir = (d) => pista.scrollTo({ left: (actual() + d) * pista.clientWidth, behavior: "smooth" });
+  ficha.querySelectorAll(".cf-foto, .cf-vertodas").forEach((b) => b.addEventListener("click", () => abrir(Number(b.dataset.i))));
+  document.getElementById("lb-cerrar").addEventListener("click", cerrar);
+  if (prev) { prev.addEventListener("click", () => ir(-1)); next.addEventListener("click", () => ir(1)); }
+  pista.addEventListener("scroll", () => requestAnimationFrame(marcar), { passive: true });
+  pista.addEventListener("click", (e) => { if (e.target.classList.contains("lb-slide")) cerrar(); });
+  document.addEventListener("keydown", (e) => {
+    if (lb.hidden) return;
+    if (e.key === "Escape") cerrar();
+    if (e.key === "ArrowRight") ir(1);
+    if (e.key === "ArrowLeft") ir(-1);
+  });
 });
 </script>
 </body>
