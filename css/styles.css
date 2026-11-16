@@ -378,7 +378,7 @@ a { color: inherit; }
 }
 @media (max-width: 760px) {
   .cf { padding-top: 1rem; }
-  .cf-gal { margin: 0 -4vw 1.6rem; }
+  .cf-gal { margin: 0 -4.34% 1.6rem; }
   .cf-galeria { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; height: auto; border-radius: 0; gap: 0; }
   .cf-galeria::-webkit-scrollbar { display: none; }
   .cf-galeria .cf-foto { flex: 0 0 100%; aspect-ratio: 4 / 3; scroll-snap-align: start; cursor: pointer; }
