@@ -22,7 +22,8 @@ a { color: inherit; }
 /* ---- Cabecera ---- */
 .cabecera { position: sticky; top: 0; z-index: 50; background: rgba(246,246,246,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--lavanda); }
 .cabecera .contenedor { display: flex; align-items: center; justify-content: space-between; height: 76px; }
-.logo { display: flex; align-items: center; text-decoration: none; font-weight: 800; font-size: 1.35rem; color: var(--morado); letter-spacing: .5px; }
+.logo { display: flex; align-items: center; text-decoration: none; font-weight: 800; font-size: 2rem; line-height: 1; color: var(--morado); letter-spacing: -.045em; }
+.logo-o { display: inline-block; width: .66em; height: .66em; margin: 0 .02em 0 .01em; vertical-align: baseline; transform: translateY(.03em); }
 .logo span { font-weight: 400; margin-left: 6px; }
 .menu { display: flex; gap: 2rem; list-style: none; align-items: center; }
 .menu a { text-decoration: none; font-weight: 700; color: var(--morado); position: relative; }
