@@ -89,7 +89,42 @@ function pintarPie() {
 }
 
 /* ---------- Listado de propiedades ---------- */
-const euros = (n) => n.toLocaleString("es-ES") + " €";
+const euros = (n) => String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
+
+/* ---------- Iconos y tarjeta de casa (listados, portada y ficha) ---------- */
+const ICO = {
+  cama: '<path d="M7 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9a4 4 0 0 0-4-4z"/>',
+  bano: '<path d="M21 13H6V5.5a1.5 1.5 0 0 1 3 0V6H7v2h5V6h-1v-.5a3.5 3.5 0 0 0-7 0V13H3v2h1v1a4 4 0 0 0 2 3.46V22h2v-2h8v2h2v-2.54A4 4 0 0 0 20 16v-1h1z"/>',
+  m2: '<path d="M3 3h7v2H5v5H3zm11 0h7v7h-2V5h-5zM3 14h2v5h5v2H3zm16 0h2v7h-7v-2h5z"/>',
+  pin: '<path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7zm0 4.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/>',
+  camara: '<path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>',
+  rejilla: '<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>',
+};
+const icono = (n) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
+function datosCasa(p, clase = "tc-datos") {
+  const d = [];
+  if (p.hab != null && p.hab !== "") d.push(`<li>${icono("cama")}<span><b>${p.hab}</b> ${Number(p.hab) === 1 ? "habitación" : "habitaciones"}</span></li>`);
+  if (p.banos != null && p.banos !== "") d.push(`<li>${icono("bano")}<span><b>${p.banos}</b> ${Number(p.banos) === 1 ? "baño" : "baños"}</span></li>`);
+  if (p.m2 != null && p.m2 !== "") d.push(`<li>${icono("m2")}<span><b>${p.m2}</b> m²</span></li>`);
+  return d.length ? `<ul class="${clase}">${d.join("")}</ul>` : "";
+}
+function tarjetaCasa(p, alq, anim = true) {
+  const url = `casa.html?tipo=${p.tipo}&id=${p.id}`;
+  const n = (p.fotos || []).length;
+  return `<article class="tarjeta tc${anim ? " aparecer" : ""}">
+    <div class="tc-foto">
+      <img src="${esc(p.img)}" alt="${esc(p.nombre)} en ${esc(p.zona)}" loading="lazy">
+      ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
+      ${n > 1 ? `<span class="tc-nfotos">${icono("camara")}${n}</span>` : ""}
+    </div>
+    <div class="tc-cuerpo">
+      <p class="tc-precio">${euros(p.precio)}${alq ? "<small>/mes</small>" : ""}</p>
+      <h3 class="tc-nombre"><a href="${url}">${esc(p.nombre)}</a></h3>
+      <p class="tc-zona">${icono("pin")}${esc(p.zona)}</p>
+      ${datosCasa(p)}
+    </div>
+  </article>`;
+}
 
 function pintarListado(lista, contenedorId, esAlquiler = false) {
   const cont = document.getElementById(contenedorId);
@@ -119,26 +154,7 @@ function pintarListado(lista, contenedorId, esAlquiler = false) {
     res = [...res].sort((a, b) => (a.estado === "Vendida" || a.estado === "Alquilada") - (b.estado === "Vendida" || b.estado === "Alquilada"));
 
     cont.innerHTML = res.length
-      ? res.map((p) => `
-        <article class="tarjeta aparecer">
-          <a class="tarjeta-foto" href="casa.html?tipo=${p.tipo}&id=${p.id}">
-            <img src="${esc(p.img)}" alt="${esc(p.nombre)} — ${esc(p.zona)}" loading="lazy">
-            ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
-          </a>
-          <div class="tarjeta-cuerpo">
-            <h3><a href="casa.html?tipo=${p.tipo}&id=${p.id}">${esc(p.nombre)}</a></h3>
-            <span class="zona">${esc(p.zona)}</span>
-            <div class="datos">
-              <div><small>Habitaciones</small><strong>${p.hab}</strong></div>
-              <div><small>Baños</small><strong>${p.banos}</strong></div>
-              <div><small>m²</small><strong>${p.m2}</strong></div>
-            </div>
-            <div class="precio-fila">
-              <span class="precio">${euros(p.precio)}${esAlquiler ? " <small>/mes</small>" : ""}</span>
-              <a class="enlace-visita" href="casa.html?tipo=${p.tipo}&id=${p.id}">Ver casa →</a>
-            </div>
-          </div>
-        </article>`).join("")
+      ? res.map((p) => tarjetaCasa(p, esAlquiler)).join("")
       : `<p class="vacio">No hay inmuebles con esos filtros.</p>`;
     observarAparicion();
   }
