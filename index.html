@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/styles.css?v=6">
+<link rel="stylesheet" href="/css/styles.css?v=7">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 </head>
 <body class="home">
@@ -148,7 +148,7 @@
 </main>
 
 <script src="/js/datos.js?v=3"></script>
-<script src="/js/main.js?v=4"></script>
+<script src="/js/main.js?v=5"></script>
 <script>
 listo.then(() => {
   /* Portada */
@@ -184,26 +184,7 @@ listo.then(() => {
     const marcadas = lista.filter((p) => p.destacada);
     return [...(marcadas.length ? marcadas : lista)].sort((a, b) => (orden[a.estado] ?? 1) - (orden[b.estado] ?? 1)).slice(0, n);
   };
-  const tarjeta = (p, alq, anim = true) => `
-    <article class="tarjeta${anim ? " aparecer" : ""}">
-      <a class="tarjeta-foto" href="casa.html?tipo=${p.tipo}&id=${p.id}">
-        <img src="${esc(p.img)}" alt="${esc(p.nombre)} en ${esc(p.zona)}" loading="lazy">
-        ${p.estado !== "Disponible" ? `<span class="etiqueta etiqueta-${slug(p.estado)}">${esc(p.estado)}</span>` : ""}
-      </a>
-      <div class="tarjeta-cuerpo">
-        <h3><a href="casa.html?tipo=${p.tipo}&id=${p.id}">${esc(p.nombre)}</a></h3>
-        <span class="zona">${esc(p.zona)}</span>
-        <div class="datos">
-          <div><small>Habitaciones</small><strong>${p.hab ?? "–"}</strong></div>
-          <div><small>Baños</small><strong>${p.banos ?? "–"}</strong></div>
-          <div><small>m²</small><strong>${p.m2 ?? "–"}</strong></div>
-        </div>
-        <div class="precio-fila">
-          <span class="precio">${euros(p.precio)}${alq ? " <small>/mes</small>" : ""}</span>
-          <a class="enlace-visita" href="casa.html?tipo=${p.tipo}&id=${p.id}">Ver casa →</a>
-        </div>
-      </div>
-    </article>`;
+  const tarjeta = (p, alq, anim = true) => tarjetaCasa(p, alq, anim);
   const pintar = (id, lista, alq, seccion, n = 3, anim = true) => {
     const el = document.getElementById(id);
     const d = destacar(lista, n);
