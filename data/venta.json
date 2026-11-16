@@ -8,10 +8,11 @@
     "precio": 515000,
     "img": "/img/chalet-los-molinos.jpg",
     "visible": true,
-    "estado": "Disponible",
+    "estado": "Reservada",
     "descripcion": "",
     "galeria": [],
-    "ubicacion": ""
+    "ubicacion": "",
+    "destacada": false
   },
   {
     "nombre": "Plaza Loreto",
