@@ -11,7 +11,7 @@ const ESTADOS_MSJ = ["Nuevo", "Respondido", "Visita confirmada", "Cerrado"];
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const euros = (n) => (Number(n) || 0).toLocaleString("es-ES") + " €";
+const euros = (n) => String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
 const slug = (t) => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const clase = (t) => slug(t || "");
 const pad = (n) => String(n).padStart(2, "0");
