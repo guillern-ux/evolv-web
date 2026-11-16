@@ -11,7 +11,7 @@ const ESTADOS_MSJ = ["Nuevo", "Respondido", "Visita confirmada", "Cerrado"];
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const euros = (n) => (Number(n) || 0).toLocaleString("es-ES") + " €";
+const euros = (n) => String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
 const slug = (t) => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const clase = (t) => slug(t || "");
 const pad = (n) => String(n).padStart(2, "0");
@@ -29,6 +29,45 @@ const telWa = (t) => {
   if (d.length === 9) d = "34" + d;
   return d;
 };
+/* Mismo identificador que usa la web para cada casa (casa.html?tipo=…&id=…) */
+function idsWeb(lista) {
+  const vistos = {};
+  return lista.map((p) => {
+    if (p.visible === false) return null;
+    let id = slug(p.nombre + " " + p.zona) || "casa";
+    vistos[id] = (vistos[id] || 0) + 1;
+    if (vistos[id] > 1) id += "-" + vistos[id];
+    return id;
+  });
+}
+const urlCasaWeb = (tipo, i) => { const id = idsWeb(tipo === "venta" ? S.venta : S.alquiler)[i]; return id ? `${WEB}/casa?tipo=${tipo}&id=${id}` : ""; };
+const ICO = {
+  cama: '<svg viewBox="0 0 24 24"><path d="M3 18v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6M3 14h18M3 18v2M21 18v2M7 9V6h4v3"/></svg>',
+  bano: '<svg viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM6 12V5a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg>',
+  m2: '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h5M15 20v-5M9 4v5M20 15h-5"/></svg>',
+};
+const datosCasa = (p) => `<span class="datos-ico">
+  <span title="Habitaciones">${ICO.cama}${p.hab ?? "–"}</span><span title="Baños">${ICO.bano}${p.banos ?? "–"}</span><span title="Superficie">${ICO.m2}${p.m2 ?? "–"} m²</span></span>`;
+/* Casa a la que se refiere un mensaje (por el enlace de la ficha o por el nombre) */
+function casaDeMensaje(m) {
+  const enl = m["Enlace del inmueble"] || "";
+  const q = enl.match(/tipo=(venta|alquiler)&id=([^&#\s]+)/);
+  for (const tipo of ["venta", "alquiler"]) {
+    const lista = tipo === "venta" ? S.venta : S.alquiler;
+    const ids = idsWeb(lista);
+    if (q && q[1] === tipo) { const i = ids.indexOf(decodeURIComponent(q[2])); if (i >= 0) return { tipo, i, p: lista[i] }; }
+  }
+  const inm = String(m.Inmueble || "");
+  if (!inm || /^Aún no lo sé/i.test(inm)) return null;
+  const alq = /alquil/i.test(m["Operación"] || "") || /\/mes/.test(inm);
+  for (const tipo of alq ? ["alquiler", "venta"] : ["venta", "alquiler"]) {
+    const lista = tipo === "venta" ? S.venta : S.alquiler;
+    const i = lista.findIndex((p) => inm.startsWith(`${p.nombre} (${p.zona})`));
+    if (i >= 0) return { tipo, i, p: lista[i] };
+  }
+  return null;
+}
+const nombreInmueble = (m) => String(m.Inmueble || "").split(" · ")[0];
 const fotoURL = (p) => (!p ? "" : p.startsWith("http") || p.startsWith("data:") ? p : S.previews[p] || WEB + p);
 
 /* ---------- Estado ---------- */
@@ -241,7 +280,7 @@ function itemVisita(v) {
 /* =========================================================
    MENSAJES
    ========================================================= */
-const OCULTOS = ["_fila", "Estado", "Notas", "Fecha", "Formulario", "Página", "Cita"];
+const OCULTOS = ["_fila", "Estado", "Notas", "Fecha", "Formulario", "Página", "Cita", "Enlace del inmueble", "Valoración enviada"];
 const nombreMsj = (m) => [m.Nombre, m.Apellido].filter(Boolean).join(" ") || m.email || "Sin nombre";
 function tipoMsj(m) {
   const f = (m.Formulario || "").toLowerCase();
@@ -251,7 +290,9 @@ function tipoMsj(m) {
   if (f.includes("prueba")) return "Prueba";
   return "Contacto";
 }
-const resumenMsj = (m) => m.Mensaje || m.Comentarios || m.Inmueble || m.Dirección || m.Servicio || "";
+const resumenMsj = (m) => tipoMsj(m) === "Visita" && m.Inmueble
+  ? [m["Operación"], nombreInmueble(m)].filter(Boolean).join(" · ")
+  : m.Mensaje || m.Comentarios || m.Inmueble || m.Dirección || m.Servicio || "";
 
 function itemMensaje(m) {
   return `<div class="fila-item" data-acc="abrirMensaje" data-fila="${m._fila}">
@@ -264,7 +305,7 @@ function filtrarMensajes() {
   return S.mensajes.filter((m) => {
     const t = tipoMsj(m), e = m.Estado || "Nuevo";
     const okF = S.filtro === "todos" || (S.filtro === "nuevos" && e === "Nuevo") || (S.filtro === "cerrados" && e === "Cerrado") ||
-      (S.filtro === "visitas" && t === "Visita") || (S.filtro === "propietarios" && (t === "Propietario" || t === "Valoración")) || (S.filtro === "contacto" && t === "Contacto");
+      (S.filtro === "visitas" && t === "Visita") || (S.filtro === "valoraciones" && t === "Valoración") || (S.filtro === "propietarios" && (t === "Propietario" || t === "Valoración")) || (S.filtro === "contacto" && t === "Contacto");
     return okF && (!q || Object.values(m).join(" ").toLowerCase().includes(q));
   });
 }
@@ -273,17 +314,18 @@ function vMensajes() {
   const lista = filtrarMensajes();
   if (S.sel == null && lista.length) S.sel = lista[0]._fila;
   const m = S.mensajes.find((x) => x._fila === S.sel);
-  const f = (id, txt) => `<button class="filtro ${S.filtro === id ? "activo" : ""}" data-acc="filtroMsj" data-f="${id}">${txt}</button>`;
+  const cuenta = (id) => { const g = S.filtro; S.filtro = id; const q = S.busca; S.busca = ""; const n = filtrarMensajes().length; S.filtro = g; S.busca = q; return n; };
+  const f = (id, txt) => `<button class="filtro ${S.filtro === id ? "activo" : ""}" data-acc="filtroMsj" data-f="${id}">${txt} <small>${cuenta(id)}</small></button>`;
   return `
   <div class="filtros">
-    ${f("todos", "Todos")}${f("nuevos", "Sin atender")}${f("visitas", "Visitas")}${f("propietarios", "Propietarios")}${f("contacto", "Contacto")}${f("cerrados", "Cerrados")}
+    ${f("todos", "Todos")}${f("nuevos", "Sin atender")}${f("visitas", "Visitas")}${f("valoraciones", "Valoraciones")}${f("propietarios", "Propietarios")}${f("contacto", "Contacto")}${f("cerrados", "Cerrados")}
     <input type="search" id="busca-msj" placeholder="Buscar nombre, email, casa…" value="${esc(S.busca)}">
   </div>
   <div class="bandeja">
     <div class="bandeja-lista">${lista.map((x) => `
       <div class="msj ${x._fila === S.sel ? "sel" : ""} ${x.Estado === "Nuevo" ? "no-leido" : ""}" data-acc="abrirMensaje" data-fila="${x._fila}">
         <div class="linea"><b>${esc(nombreMsj(x))}</b><small>${esc((x.Fecha || "").slice(0, 16))}</small></div>
-        <div class="linea"><small>${esc(tipoMsj(x))}</small><span class="chip ${clase(x.Estado || "Nuevo")}">${esc(x.Estado || "Nuevo")}</span></div>
+        <div class="linea"><small class="tipo-${clase(tipoMsj(x))}">${esc(tipoMsj(x))}</small><span class="chip ${clase(x.Estado || "Nuevo")}">${esc(x.Estado || "Nuevo")}</span></div>
         <p>${esc(resumenMsj(x))}</p>
       </div>`).join("") || '<p class="vacio">No hay mensajes con este filtro</p>'}
     </div>
@@ -296,10 +338,23 @@ function detalleMensaje(m) {
   const wa = telWa(tel);
   const datos = Object.keys(m).filter((k) => !OCULTOS.includes(k));
   const firma = `\n\nUn saludo,\nGuillermo\n${S.ajustes?.nombre || "Evolv Real Estate"}\n${S.ajustes?.telefono || "+34 627 05 76 68"}`;
-  const cuerpo = `Hola ${m.Nombre || ""},\n\nGracias por contactar con Evolv Real Estate. ${tipoMsj(m) === "Visita" ? `Te escribo sobre tu solicitud para visitar ${m.Inmueble || "el inmueble"}.` : ""}\n\n${firma}`;
+  const casa = casaDeMensaje(m);
+  const inm = casa ? `${casa.p.nombre} (${casa.p.zona})` : nombreInmueble(m);
+  const cuerpo = `Hola ${m.Nombre || ""},\n\nGracias por contactar con Evolv Real Estate. ${tipoMsj(m) === "Visita" ? `Te escribo sobre tu solicitud para visitar ${inm || "el inmueble"}.` : ""}\n\n${firma}`;
+  const enlace = m["Enlace del inmueble"] || (casa ? urlCasaWeb(casa.tipo, casa.i) : "");
+  const fichaCasa = casa ? `<div class="msj-casa">
+      ${casa.p.img ? `<img src="${esc(fotoURL(casa.p.img))}" alt="">` : '<div class="sin-foto"></div>'}
+      <div class="mc-info"><small>${esc(m["Operación"] || (casa.tipo === "venta" ? "Comprar" : "Alquilar"))} · le interesa</small>
+        <b>${esc(casa.p.nombre)}</b><span>${esc(casa.p.zona)} · ${euros(casa.p.precio)}${casa.tipo === "alquiler" ? "/mes" : ""}</span>
+        <span class="chip ${clase(casa.p.estado || "Disponible")}">${esc(casa.p.estado || "Disponible")}</span></div>
+      <div class="mc-acc">${enlace ? `<a class="btn peq" href="${esc(enlace)}" target="_blank" rel="noopener">Ver ficha ↗</a>` : ""}
+        <button class="btn peq" data-acc="abrirCasa" data-tipo="${casa.tipo}" data-nombre="${esc(casa.p.nombre)}" data-zona="${esc(casa.p.zona)}">Abrir en Casas</button></div>
+    </div>`
+    : tipoMsj(m) === "Visita" && m.Inmueble ? `<div class="aviso-info">${m["Operación"] ? `<b>${esc(m["Operación"])}</b> · ` : ""}${esc(m.Inmueble)}${enlace ? ` · <a href="${esc(enlace)}" target="_blank" rel="noopener">Ver ficha ↗</a>` : ""}</div>` : "";
+  const valor = m["Valoración enviada"] ? `<div class="aviso-info verde"><b>Valoración enviada al propietario:</b> ${esc(m["Valoración enviada"])}</div>` : "";
   return `<div class="detalle">
     <div class="detalle-cab">
-      <div><h2>${esc(nombreMsj(m))}</h2><p>${esc(tipoMsj(m))} · recibido ${esc(m.Fecha || "")}</p></div>
+      <div><h2>${esc(nombreMsj(m))}</h2><p><span class="chip tipo-${clase(tipoMsj(m))}">${esc(tipoMsj(m))}</span> recibido ${esc(m.Fecha || "")}</p></div>
       <div class="acciones">
         <select id="estado-msj" data-fila="${m._fila}" style="width:auto">${ESTADOS_MSJ.map((e) => `<option ${e === (m.Estado || "Nuevo") ? "selected" : ""}>${e}</option>`).join("")}</select>
         ${wa ? `<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${encodeURIComponent(`Hola ${m.Nombre || ""}, soy Guillermo de Evolv Real Estate. `)}">WhatsApp</a>` : ""}
@@ -307,6 +362,7 @@ function detalleMensaje(m) {
       </div>
     </div>
     ${m.Cita ? `<div class="aviso-info">${esc(m.Cita)} <a href="#visitas" data-acc="irVisitaDe" data-fecha="${esc(m["Fecha visita"] || "")}">Ver en el calendario →</a></div>` : ""}
+    ${fichaCasa}${valor}
     <dl class="tabla-datos">${datos.map((k) => `<dt>${esc(k)}</dt><dd>${esc(m[k])}</dd>`).join("") || "<dd>Sin datos</dd>"}</dl>
     <div class="bloque"><h3>Notas internas</h3>
       <textarea id="nota-msj" placeholder="Apuntes sobre este cliente (solo los ves tú)">${esc(m.Notas || "")}</textarea>
@@ -315,7 +371,7 @@ function detalleMensaje(m) {
     <div class="bloque"><h3>Responder por email</h3>
       ${m.email ? `<div class="campos">
         <div><label>Para</label><input type="email" id="r-para" value="${esc(m.email)}"></div>
-        <div><label>Asunto</label><input type="text" id="r-asunto" value="${esc(tipoMsj(m) === "Visita" ? "Tu visita a " + (m.Inmueble || "nuestro inmueble") : "Tu consulta en Evolv Real Estate")}"></div>
+        <div><label>Asunto</label><input type="text" id="r-asunto" value="${esc(tipoMsj(m) === "Visita" ? "Tu visita a " + (inm || "nuestro inmueble") : tipoMsj(m) === "Valoración" ? "La valoración de tu vivienda" : "Tu consulta en Evolv Real Estate")}"></div>
         <div class="completo"><label>Mensaje</label><textarea id="r-cuerpo" style="min-height:180px">${esc(cuerpo)}</textarea></div>
       </div>
       <div class="acciones" style="margin-top:.6rem"><button class="btn primario" data-acc="enviarRespuesta" data-fila="${m._fila}">Enviar email</button></div>`
@@ -408,17 +464,22 @@ function modalVisita(v) {
     </div>`);
 }
 
+let OPC_VISITA = {};
 function modalNuevaVisita(dia) {
   const base = dia ? new Date(dia + "T11:00:00") : new Date(Date.now() + 864e5);
   if (!dia) base.setHours(11, 0, 0, 0);
-  const casas = [...S.venta.map((p) => p.nombre + " (" + p.zona + ")"), ...S.alquiler.map((p) => p.nombre + " (" + p.zona + ") · alquiler")];
+  const abiertas = (l) => l.filter((p) => p.visible !== false && !["Vendida", "Alquilada"].includes(p.estado));
+  const opc = (l, alq) => abiertas(l).map((p) => `<option value="${esc(`${p.nombre} (${p.zona}) · ${euros(p.precio)}${alq ? "/mes" : ""}`)}">${esc(`${p.nombre} (${p.zona}) · ${euros(p.precio)}${alq ? "/mes" : ""}`)}</option>`).join("");
+  OPC_VISITA = { Comprar: opc(S.venta, false), Alquilar: opc(S.alquiler, true) };
+  for (const k in OPC_VISITA) OPC_VISITA[k] += '<option value="">Otra / aún sin decidir</option>';
   abrirModal(`
     <div class="modal-cab"><h2>Nueva visita</h2><button class="btn icono" data-acc="cerrarModal">✕</button></div>
     <div class="modal-cuerpo"><div class="campos">
       <div><label>Nombre del cliente</label><input type="text" id="n-nombre"></div>
       <div><label>Teléfono</label><input type="tel" id="n-tel"></div>
       <div><label>Email</label><input type="email" id="n-email"></div>
-      <div><label>Inmueble</label><input type="text" id="n-inm" list="lista-casas"><datalist id="lista-casas">${casas.map((c) => `<option value="${esc(c)}">`).join("")}</datalist></div>
+      <div><label>Operación</label><select id="n-op"><option>Comprar</option><option>Alquilar</option></select></div>
+      <div><label>Casa</label><select id="n-inm">${OPC_VISITA.Comprar}</select></div>
       <div><label>Fecha y hora</label><input type="datetime-local" id="n-inicio" value="${aLocalInput(base)}"></div>
       <div><label>Duración</label><select id="n-dur">${[30, 45, 60, 90, 120].map((m) => `<option value="${m}" ${m === 60 ? "selected" : ""}>${m} min</option>`).join("")}</select></div>
       <div class="completo"><label>Notas</label><textarea id="n-notas" style="min-height:70px"></textarea></div>
@@ -449,10 +510,11 @@ function vCasas() {
         <div class="foto">${p.img ? `<img src="${esc(fotoURL(p.img))}" alt="" loading="lazy">` : ""}
           <span class="chip ${clase(p.estado || "Disponible")}">${esc(p.estado || "Disponible")}</span>
           ${p.destacada ? '<span class="destacada-marca" title="Destacada en la portada">★ Destacada</span>' : ""}
+          ${(p.galeria || []).length ? `<span class="n-fotos">${(p.galeria || []).length + 1} fotos</span>` : ""}
           ${p.visible === false ? '<div class="oculta-marca">Oculta en la web</div>' : ""}</div>
         <div class="info"><h3>${esc(p.nombre)}</h3><div class="zona">${esc(p.zona)}</div>
           <div class="linea"><span class="precio">${euros(p.precio)}${S.tab === "alquiler" ? "<small>/mes</small>" : ""}</span>
-          <span class="datos">${p.hab ?? "–"} hab · ${p.banos ?? "–"} baños · ${p.m2 ?? "–"} m²</span></div></div>
+          </div>${datosCasa(p)}</div>
       </div>`).join("")}
   </div>`;
 }
@@ -468,7 +530,7 @@ function pintarModalCasa() {
   const { tipo, i, casa: p } = EDIT;
   const ed = S.casasEditables;
   const estados = ["Disponible", "Novedad", "Reservada", tipo === "venta" ? "Vendida" : "Alquilada"];
-  const urlWeb = `${WEB}/casa?tipo=${tipo}&id=${slug(p.nombre + " " + p.zona)}`;
+  const urlWeb = i >= 0 ? urlCasaWeb(tipo, i) : "";
   abrirModal(`
     <div class="modal-cab"><h2>${i >= 0 ? esc(p.nombre) : "Nueva casa en " + tipo}</h2><button class="btn icono" data-acc="cerrarModal">✕</button></div>
     <div class="modal-cuerpo">
@@ -501,7 +563,7 @@ function pintarModalCasa() {
     </div>
     <div class="modal-pie">
       ${ed && i >= 0 ? `<button class="btn rojo izq" data-acc="borrarCasa">Eliminar casa</button>` : ""}
-      ${i >= 0 ? `<a class="btn" href="${urlWeb}" target="_blank" rel="noopener">Ver en la web</a>` : ""}
+      ${urlWeb ? `<a class="btn" href="${urlWeb}" target="_blank" rel="noopener">Ver en la web ↗</a>` : ""}
       ${ed ? `<button class="btn primario" data-acc="guardarCasa">Guardar y publicar</button>` : `<button class="btn" data-acc="cerrarModal">Cerrar</button>`}
     </div>`);
   const inp = $("#c-fotos");
@@ -735,17 +797,26 @@ const ACC = {
     const fecha = new Date(ini);
     const d = {
       nombre: $("#n-nombre").value.trim(), telefono: $("#n-tel").value.trim(), email: $("#n-email").value.trim(),
-      inmueble: $("#n-inm").value.trim(), inicio: fecha.toISOString(), duracion: $("#n-dur").value, notas: $("#n-notas").value,
+      inmueble: [$("#n-op").value, $("#n-inm").value.trim()].filter(Boolean).join(" · "), inicio: fecha.toISOString(), duracion: $("#n-dur").value, notas: $("#n-notas").value,
       avisar: $("#n-avisar").checked,
     };
     if (d.avisar && !d.email) throw new Error("Para avisar al cliente, escribe su email");
-    d.mensaje = `Hola ${d.nombre},\n\nTe confirmo la visita a ${d.inmueble || "nuestro inmueble"} el ${fecha.toLocaleString("es-ES", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}.\n\nUn saludo,\nGuillermo\nEvolv Real Estate`;
+    d.mensaje = `Hola ${d.nombre},\n\nTe confirmo la visita a ${$("#n-inm").value.split(" · ")[0] || "nuestro inmueble"} el ${fecha.toLocaleString("es-ES", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}.\n\nUn saludo,\nGuillermo\nEvolv Real Estate`;
     const v = await api("crearVisita", d);
     S.visitas.push(v); S.dia = claveDia(fecha);
     S.mes = new Date(fecha.getFullYear(), fecha.getMonth(), 1);
     cerrarModal(); irA("visitas"); pintar();
     toast("Visita creada en tu calendario ✓", "ok");
   }).catch((e) => toast(e.message, "error")),
+
+  abrirCasa: async (b) => {
+    S.tab = b.dataset.tipo;
+    if (S.github && !S.casasEditables) { try { await cargarCasas(); } catch (e) { return toast(e.message, "error"); } }
+    const lista = b.dataset.tipo === "venta" ? S.venta : S.alquiler;
+    const i = lista.findIndex((p) => p.nombre === b.dataset.nombre && p.zona === b.dataset.zona);
+    irA("casas"); await pintar();
+    if (i >= 0) modalCasa(b.dataset.tipo, i); else toast("No encuentro esa casa en tu lista", "error");
+  },
 
   /* Casas */
   tabCasas: (b) => { S.tab = b.dataset.t; pintar(); },
@@ -809,6 +880,9 @@ document.addEventListener("click", (e) => {
   if (!e.target.closest("#btn-avisos") && !e.target.closest("#avisos")) $("#avisos").classList.add("oculto");
 });
 document.addEventListener("change", async (e) => {
+  if (e.target.id === "n-op") {
+    $("#n-inm").innerHTML = OPC_VISITA[e.target.value] || "";
+  }
   if (e.target.id === "estado-msj") {
     const fila = Number(e.target.dataset.fila), estado = e.target.value;
     try {

@@ -13,7 +13,8 @@ input,select,textarea,button{font:inherit;color:inherit}
 .error{color:var(--rj);font-weight:700;min-height:1.2em}
 
 /* Marca */
-.marca{font-weight:800;font-size:1.3rem;letter-spacing:.5px;color:#fff}
+.marca{display:flex;align-items:baseline;font-weight:800;font-size:1.3rem;letter-spacing:.5px;color:#fff}
+.marca .logo-svg{display:block;height:1.05em;width:auto}
 .marca span{font-weight:500;margin-left:6px;opacity:.75}
 .marca.grande{color:var(--m);font-size:1.8rem}
 
@@ -208,3 +209,24 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--m);border-color:
 .tp-cab,.tp-fila{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:.5rem;align-items:center}
 .tp-cab{font-size:.75rem;font-weight:800;color:var(--md);text-transform:uppercase;letter-spacing:.3px}
 @media(max-width:640px){.tp-cab{display:none}.tp-fila{grid-template-columns:1fr 1fr;background:var(--bg);padding:.6rem;border-radius:12px}.tp-fila input[data-c=nombre]{grid-column:1/-1}}
+
+/* Logo, fichas de casa en mensajes, iconos (alineado con la web) */
+.marca span{font-size:.8em}
+.filtro small{opacity:.6;font-weight:700;margin-left:.15rem}
+.chip[class*="tipo-"]{margin-right:.35rem}
+.tipo-visita{color:#2563eb}.tipo-valoracion{color:#8a5a00}.tipo-propietario{color:#1f7a4d}
+.chip.tipo-visita{background:var(--az-bg)}.chip.tipo-valoracion{background:var(--am-bg)}.chip.tipo-propietario{background:var(--ok-bg)}.chip.tipo-contacto,.chip.tipo-prueba{background:var(--lav);color:var(--md)}
+.msj-casa{display:flex;align-items:center;gap:1rem;padding:.8rem;border:1px solid var(--lav);border-radius:14px;margin:0 0 1rem;background:#fff}
+.msj-casa img,.msj-casa .sin-foto{width:110px;height:78px;object-fit:cover;border-radius:10px;flex:none;background:var(--lav)}
+.mc-info{display:flex;flex-direction:column;gap:.15rem;min-width:0;flex:1}
+.mc-info small{color:var(--md);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+.mc-info b{color:var(--m);font-size:1.05rem}
+.mc-info span{color:var(--md);font-size:.9rem}
+.mc-info .chip{align-self:flex-start;margin-top:.2rem}
+.mc-acc{display:flex;flex-direction:column;gap:.4rem}
+.aviso-info.verde{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.datos-ico{display:flex;gap:.9rem;margin-top:.55rem;color:var(--md);font-size:.85rem;font-weight:600}
+.datos-ico span{display:inline-flex;align-items:center;gap:.3rem}
+.datos-ico svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.casa .foto .n-fotos{position:absolute;bottom:10px;right:10px;background:rgba(29,23,36,.72);color:#fff;border-radius:999px;padding:.15rem .55rem;font-size:.74rem;font-weight:700}
+@media (max-width:640px){.msj-casa{flex-wrap:wrap}.msj-casa img,.msj-casa .sin-foto{width:100%;height:150px}.mc-info{flex-basis:100%}.mc-acc{flex-direction:row;width:100%}.mc-acc .btn{flex:1;justify-content:center}}
