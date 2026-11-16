@@ -71,7 +71,7 @@ listo.then(() => {
         <p class="cf-precio">${euros(p.precio)}${esAlq ? " <small>/mes</small>" : ""}</p>
         ${cerrada ? `<p class="aviso-cerrada">Este inmueble ya está ${p.estado.toLowerCase()}. Escríbenos y te avisamos de casas parecidas.</p>` : ""}
         <div class="acciones">
-          ${cerrada ? "" : `<a class="boton" href="reservar.html?inmueble=${encodeURIComponent(nombreCompleto)}">Solicitar visita</a>`}
+          ${cerrada ? "" : `<a class="boton" href="reservar.html?tipo=${tipo}&id=${encodeURIComponent(p.id)}">Solicitar visita</a>`}
           <a class="boton boton-wa" href="${wa}" target="_blank" rel="noopener">WhatsApp</a>
           <a class="boton boton-borde" href="tel:${(CONFIG.telefono || "").replace(/\s/g, "")}">Llamar</a>
         </div>
