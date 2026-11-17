@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<base href="/">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inmueble | Evolv Real Estate</title>
 <meta name="description" content="Inmueble de Evolv Real Estate en la Sierra de Madrid.">
@@ -13,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css?v=7">
-<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 
@@ -25,16 +26,20 @@
 <script src="/js/main.js?v=5"></script>
 <script>
 listo.then(() => {
+  // Dirección propia: /venta/<id> o /alquiler/<id> (la antigua casa.html?tipo=…&id=… redirige aquí)
   const q = new URLSearchParams(location.search);
-  const tipo = q.get("tipo") === "alquiler" ? "alquiler" : "venta";
+  const ruta = location.pathname.match(/^\/(venta|alquiler)\/([^/?#]+)/);
+  const tipo = ruta ? ruta[1] : q.get("tipo") === "alquiler" ? "alquiler" : "venta";
+  const idCasa = ruta ? decodeURIComponent(ruta[2]) : q.get("id");
   const lista = tipo === "alquiler" ? ALQUILER : VENTA;
-  const p = lista.find((x) => x.id === q.get("id"));
+  const p = lista.find((x) => x.id === idCasa);
+  if (p && !ruta) { location.replace(`/${tipo}/${encodeURIComponent(p.id)}`); return; }
   const ficha = document.getElementById("ficha");
 
   if (!p) {
     ficha.innerHTML = `<div style="padding:8rem 0;text-align:center"><h1 class="titulo">Este inmueble ya no está disponible</h1>
       <p style="margin-bottom:2rem">Puede que se haya vendido o alquilado.</p>
-      <a class="boton" href="${tipo === "alquiler" ? "alquilar" : "comprar"}.html">Ver otras casas</a></div>`;
+      <a class="boton" href="/${tipo === "alquiler" ? "alquilar" : "comprar"}">Ver otras casas</a></div>`;
     return;
   }
 
@@ -53,7 +58,7 @@ listo.then(() => {
   const FLECHA = (d) => `<svg viewBox="0 0 24 24"><path d="${d === "prev" ? "M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z" : "M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"}"/></svg>`;
 
   ficha.innerHTML = `
-    <a class="volver" href="${esAlq ? "alquilar" : "comprar"}.html">← Volver a ${esAlq ? "alquiler" : "venta"}</a>
+    <a class="volver" href="/${esAlq ? "alquilar" : "comprar"}">← Volver a ${esAlq ? "alquiler" : "venta"}</a>
 
     <div class="cf-gal">
       <div class="cf-galeria n${Math.min(N, 5)}" id="cf-galeria">
@@ -75,7 +80,7 @@ listo.then(() => {
         <p class="cf-precio">${euros(p.precio)}${esAlq ? " <small>/mes</small>" : ""}</p>
         ${cerrada ? `<p class="aviso-cerrada">Este inmueble ya está ${p.estado.toLowerCase()}. Escríbenos y te avisamos de casas parecidas.</p>` : ""}
         <div class="acciones">
-          ${cerrada ? "" : `<a class="boton" href="reservar.html?tipo=${tipo}&id=${encodeURIComponent(p.id)}">Solicitar visita</a>`}
+          ${cerrada ? "" : `<a class="boton" href="/reservar?tipo=${tipo}&id=${encodeURIComponent(p.id)}">Solicitar visita</a>`}
           <a class="boton boton-wa" href="${wa}" target="_blank" rel="noopener">WhatsApp</a>
           <a class="boton boton-borde" href="tel:${(CONFIG.telefono || "").replace(/\s/g, "")}">Llamar</a>
         </div>

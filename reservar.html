@@ -96,7 +96,7 @@ listo.then(() => {
     const lista = abiertas(alq ? ALQUILER : VENTA);
     caja.innerHTML = lista.map((p) => `
       <label class="r-casa">
-        <input type="radio" name="Inmueble" value="${esc(valor(p))} · ${euros(p.precio)}${alq ? "/mes" : ""}" data-url="${location.origin}/casa.html?tipo=${p.tipo}&id=${p.id}" data-id="${p.id}" required>
+        <input type="radio" name="Inmueble" value="${esc(valor(p))} · ${euros(p.precio)}${alq ? "/mes" : ""}" data-url="${location.origin}/${p.tipo}/${p.id}" data-id="${p.id}" required>
         <img src="${esc(p.img)}" alt="" loading="lazy">
         <span class="r-info"><b>${esc(p.nombre)}</b>
           <small>${esc(p.zona)}${p.hab ? ` · ${p.hab} hab.` : ""}${p.m2 ? ` · ${p.m2} m²` : ""}</small>

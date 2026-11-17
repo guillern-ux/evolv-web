@@ -29,7 +29,7 @@ const telWa = (t) => {
   if (d.length === 9) d = "34" + d;
   return d;
 };
-/* Mismo identificador que usa la web para cada casa (casa.html?tipo=…&id=…) */
+/* Mismo identificador que usa la web para cada casa (/venta/<id> o /alquiler/<id>) */
 function idsWeb(lista) {
   const vistos = {};
   return lista.map((p) => {
@@ -40,7 +40,7 @@ function idsWeb(lista) {
     return id;
   });
 }
-const urlCasaWeb = (tipo, i) => { const id = idsWeb(tipo === "venta" ? S.venta : S.alquiler)[i]; return id ? `${WEB}/casa?tipo=${tipo}&id=${id}` : ""; };
+const urlCasaWeb = (tipo, i) => { const id = idsWeb(tipo === "venta" ? S.venta : S.alquiler)[i]; return id ? `${WEB}/${tipo}/${id}` : ""; };
 const ICO = {
   cama: '<svg viewBox="0 0 24 24"><path d="M3 18v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6M3 14h18M3 18v2M21 18v2M7 9V6h4v3"/></svg>',
   bano: '<svg viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM6 12V5a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg>',
@@ -51,7 +51,7 @@ const datosCasa = (p) => `<span class="datos-ico">
 /* Casa a la que se refiere un mensaje (por el enlace de la ficha o por el nombre) */
 function casaDeMensaje(m) {
   const enl = m["Enlace del inmueble"] || "";
-  const q = enl.match(/tipo=(venta|alquiler)&id=([^&#\s]+)/);
+  const q = enl.match(/\/(venta|alquiler)\/([^/?&#\s]+)/) || enl.match(/tipo=(venta|alquiler)&id=([^&#\s]+)/);
   for (const tipo of ["venta", "alquiler"]) {
     const lista = tipo === "venta" ? S.venta : S.alquiler;
     const ids = idsWeb(lista);

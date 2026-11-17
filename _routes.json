@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/venta/*", "/alquiler/*", "/sitemap.xml"],
+  "exclude": []
+}
