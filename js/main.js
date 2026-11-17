@@ -81,11 +81,37 @@ function pintarPie() {
           </form>
         </div>
       </div>
+      <div class="pie-zonas"><span>Zonas:</span> ${ZONAS.map(([s, n]) => `<a href="inmobiliaria-${s}.html">${n}</a>`).join("")}</div>
       <div class="copy"><span>© ${new Date().getFullYear()} ${CONFIG.nombre}</span><span>Agencia inmobiliaria en la Sierra de Madrid</span></div>
     </div>
   </footer>
   <a class="whatsapp" href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">${ICONOS.whatsapp}</a>`;
   document.body.insertAdjacentHTML("beforeend", html);
+}
+
+/* ---------- Zonas donde trabajamos (páginas por municipio) ---------- */
+const ZONAS = [["los-molinos", "Los Molinos"], ["guadarrama", "Guadarrama"], ["cercedilla", "Cercedilla"], ["collado-mediano", "Collado Mediano"], ["alpedrete", "Alpedrete"], ["moralzarzal", "Moralzarzal"], ["becerril-de-la-sierra", "Becerril de la Sierra"], ["navacerrada", "Navacerrada"], ["collado-villalba", "Collado Villalba"], ["el-escorial", "El Escorial"], ["san-lorenzo-de-el-escorial", "San Lorenzo de El Escorial"]];
+
+/* Casas de un municipio (páginas inmobiliaria-…) */
+function pintarZona() {
+  const cont = document.getElementById("z-casas");
+  if (!cont) return;
+  const muni = cont.dataset.municipio;
+  const igual = (z) => slug(z) === slug(muni) || slug(z).includes(slug(muni));
+  const lista = [...VENTA.map((p) => [p, false]), ...ALQUILER.map((p) => [p, true])].filter(([p]) => igual(p.zona || ""));
+  if (lista.length) {
+    cont.innerHTML = lista.map(([p, alq]) => tarjetaCasa(p, alq)).join("");
+    observarAparicion();
+    return;
+  }
+  const wa = `https://wa.me/${CONFIG.whatsapp || ""}?text=${encodeURIComponent(`Hola, estoy buscando casa en ${muni}.`)}`;
+  cont.innerHTML = `<div class="sin-casas">
+    <h2>Ahora mismo no hay casas publicadas en ${esc(muni)}</h2>
+    <p>Cuéntanos qué buscas en ${esc(muni)} y te avisamos en cuanto tengamos algo que encaje contigo. Si tienes una casa aquí, también te ayudamos a venderla o alquilarla.</p>
+    <div class="acciones">
+      <a class="boton" href="${wa}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+      <a class="boton borde" href="valorar.html">Valorar mi casa gratis</a>
+    </div></div>`;
 }
 
 /* ---------- Listado de propiedades ---------- */
