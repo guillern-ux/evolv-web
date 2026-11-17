@@ -129,6 +129,18 @@ function tarjetaCasa(p, alq, anim = true) {
 function pintarListado(lista, contenedorId, esAlquiler = false) {
   const cont = document.getElementById(contenedorId);
   if (!cont) return;
+  if (!lista.length) {
+    document.querySelector(".filtros")?.remove();
+    const wa = `https://wa.me/${CONFIG.whatsapp || ""}?text=${encodeURIComponent(`Hola, estoy buscando una casa en ${esAlquiler ? "alquiler" : "venta"} en la Sierra de Madrid.`)}`;
+    cont.innerHTML = `<div class="sin-casas">
+      <h2>Estamos preparando nuevas casas</h2>
+      <p>Ahora mismo no hay viviendas en ${esAlquiler ? "alquiler" : "venta"} publicadas. Cuéntanos qué buscas y te avisamos en cuanto tengamos algo que encaje contigo.</p>
+      <div class="acciones">
+        <a class="boton" href="${wa}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+        <a class="boton borde" href="valorar.html">¿Tienes una casa? Valórala gratis</a>
+      </div></div>`;
+    return;
+  }
   const selZona = document.getElementById("filtro-zona");
   const selHab = document.getElementById("filtro-hab");
   const selOrden = document.getElementById("filtro-orden");
