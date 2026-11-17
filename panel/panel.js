@@ -68,6 +68,12 @@ function casaDeMensaje(m) {
   return null;
 }
 const nombreInmueble = (m) => String(m.Inmueble || "").split(" · ")[0];
+/* Artículos del blog (foto por defecto si no se ha cambiado en Ajustes) */
+const BLOG = [
+  ["precio-vivienda-sierra-de-madrid-2026", "Cuánto cuesta una casa en la Sierra de Madrid", "/img/comprar-vivienda.jpg"],
+  ["impuestos-vender-casa", "Qué impuestos pagas al vender tu casa", "/img/la-perla.jpg"],
+  ["preparar-casa-para-vender", "Cómo preparar tu casa para venderla", "/img/chalet-los-molinos.jpg"],
+];
 const fotoURL = (p) => (!p ? "" : p.startsWith("http") || p.startsWith("data:") ? p : S.previews[p] || WEB + p);
 
 /* ---------- Estado ---------- */
@@ -662,6 +668,13 @@ function vAjustes() {
         <div class="foto-item" style="max-width:260px"><img src="${esc(fotoURL(a[k]))}" alt=""></div>
         <label class="btn peq" style="margin-top:.4rem;display:inline-flex" for="aj-${k}">Cambiar foto</label><input type="file" id="aj-${k}" data-k="${k}" class="aj-foto" accept="image/*" hidden></div>`).join("")}
     </div>
+    <h2 style="margin-top:1.4rem">Fotos del blog</h2>
+    <div class="campos">
+      ${BLOG.map(([s, t, def]) => `<div><label>${esc(t)}</label>
+        <div class="foto-item" style="max-width:260px"><img src="${esc(fotoURL((a.blog || {})[s] || def))}" alt=""></div>
+        <label class="btn peq" style="margin-top:.4rem;display:inline-flex" for="aj-blog-${s}">Cambiar foto</label><input type="file" id="aj-blog-${s}" data-k="blog:${s}" class="aj-foto" accept="image/*" hidden>
+        <a class="btn peq" style="margin-top:.4rem" href="${WEB}/blog/${s}" target="_blank" rel="noopener">Ver artículo</a></div>`).join("")}
+    </div>
     <h2 style="margin-top:1.4rem">Opiniones de clientes <button class="btn peq" data-acc="addTestimonio">+ Añadir</button></h2>
     <div id="testimonios" style="display:grid;gap:.8rem">${(a.testimonios || []).map((t, k) => `
       <div class="campos" style="background:var(--bg);padding:.8rem;border-radius:12px">
@@ -936,8 +949,10 @@ document.addEventListener("change", async (e) => {
     try {
       toast("Subiendo foto…");
       const dataUrl = await prepararFoto(e.target.files[0]);
-      const ruta = await api("subirFoto", { nombre: `${k}-${Date.now().toString(36)}.jpg`, base64: dataUrl.split(",")[1] });
-      S.previews[ruta] = dataUrl; S.ajustes[k] = ruta; pintar();
+      const ruta = await api("subirFoto", { nombre: `${k.replace(":", "-")}-${Date.now().toString(36)}.jpg`, base64: dataUrl.split(",")[1] });
+      S.previews[ruta] = dataUrl;
+      if (k.startsWith("blog:")) { S.ajustes.blog = S.ajustes.blog || {}; S.ajustes.blog[k.slice(5)] = ruta; } else S.ajustes[k] = ruta;
+      pintar();
       toast("Foto subida. Pulsa «Guardar y publicar».", "ok");
     } catch (err) { toast(err.message, "error"); }
   }
