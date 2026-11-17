@@ -36,7 +36,7 @@
     "m2": 670,
     "precio": 3450000,
     "img": "/img/plaza-dolores.jpg",
-    "visible": false,
+    "visible": true,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
