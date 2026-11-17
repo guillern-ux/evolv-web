@@ -7,7 +7,7 @@
     "m2": 450,
     "precio": 515000,
     "img": "/img/chalet-los-molinos.jpg",
-    "visible": true,
+    "visible": false,
     "estado": "Reservada",
     "descripcion": "",
     "galeria": [],
