@@ -391,3 +391,51 @@ a { color: inherit; }
   .lb-slide { padding: 0 0 3vh; }
   .lb-slide img { border-radius: 0; }
 }
+
+/* =========================================================
+   ¿Cuánto vale tu casa? (portada)
+   ========================================================= */
+.h-valor { background: linear-gradient(120deg, var(--morado) 0%, #3d2a57 100%); color: #fff; padding: 5rem 0 0; overflow: hidden; }
+.h-valor-dentro { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3.5rem; align-items: center; padding-bottom: 4rem; }
+.h-valor h2 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.1; }
+.h-valor-texto > p:not(.h-eyebrow) { color: var(--lavanda); margin-top: .7rem; font-size: 1.08rem; max-width: 34rem; }
+.hv-ventajas { list-style: none; display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; margin: 1.4rem 0 2rem; padding: 0; }
+.hv-ventajas li { display: flex; align-items: center; gap: .45rem; font-weight: 700; font-size: .95rem; }
+.hv-ventajas svg { width: 18px; height: 18px; fill: #cdbff0; }
+.hv-tarjeta { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 22px; padding: 1.8rem; box-shadow: 0 20px 50px rgba(0,0,0,.25); backdrop-filter: blur(6px); }
+.hv-cab { display: flex; align-items: center; gap: .55rem; text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.7); }
+.hv-vivo { width: 8px; height: 8px; border-radius: 50%; background: #7ee2a8; box-shadow: 0 0 0 0 rgba(126,226,168,.6); animation: hv-pulso 2s infinite; }
+@keyframes hv-pulso { 70% { box-shadow: 0 0 0 8px rgba(126,226,168,0); } 100% { box-shadow: 0 0 0 0 rgba(126,226,168,0); } }
+.hv-casa { margin-top: 1.1rem; color: var(--lavanda); font-weight: 500; min-height: 1.6em; }
+.hv-precio { display: flex; align-items: baseline; flex-wrap: wrap; gap: .35rem; font-size: clamp(1.9rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: .2rem; }
+.hv-precio small { font-size: .55em; font-weight: 700; color: var(--lavanda); }
+.hv-guion { color: rgba(255,255,255,.5); font-weight: 500; }
+.hv-barra { height: 8px; background: rgba(255,255,255,.12); border-radius: 999px; margin: 1.1rem 0 1.4rem; overflow: hidden; }
+.hv-barra span { display: block; height: 100%; width: 40%; border-radius: inherit; background: linear-gradient(90deg, #a996d6, #7ee2a8); transition: width .9s cubic-bezier(.2,.7,.2,1); }
+.hv-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.1rem; border-top: 1px solid rgba(255,255,255,.12); }
+.hv-datos small { display: block; color: rgba(255,255,255,.6); font-size: .8rem; }
+.hv-datos b { font-size: 1.05rem; }
+.hv-nota { margin-top: 1rem; font-size: .78rem; color: rgba(255,255,255,.5); }
+.hv-cinta { border-top: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); overflow: hidden; white-space: nowrap; }
+.hv-pista { display: inline-flex; animation: hv-correr 45s linear infinite; }
+.hv-cinta:hover .hv-pista { animation-play-state: paused; }
+.hv-item { display: inline-flex; align-items: center; gap: .9rem; padding: 1rem 2rem; font-size: .92rem; color: var(--lavanda); border-right: 1px solid rgba(255,255,255,.1); }
+.hv-item b { color: #fff; }
+@keyframes hv-correr { to { transform: translateX(-50%); } }
+@media (max-width: 900px) {
+  .h-valor { padding-top: 3.5rem; }
+  .h-valor-dentro { grid-template-columns: 1fr; gap: 2.2rem; padding-bottom: 3rem; }
+  .h-valor .h-cta-botones .boton { width: 100%; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hv-pista, .hv-vivo { animation: none; }
+  .hv-cinta { overflow-x: auto; }
+}
+
+/* Sin casas publicadas */
+.sin-casas { grid-column: 1/-1; text-align: center; background: #fff; border-radius: 22px; padding: 3.5rem 1.5rem; box-shadow: 0 1px 3px rgba(40,26,57,.06); }
+.sin-casas h2 { color: var(--morado); font-size: 1.5rem; margin-bottom: .5rem; }
+.sin-casas p { color: var(--morado-medio); max-width: 34rem; margin: 0 auto 1.6rem; }
+.sin-casas .acciones { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+.boton.borde { background: transparent; color: var(--morado) !important; }
+.boton.borde:hover { background: var(--morado); color: #fff !important; }

@@ -131,18 +131,36 @@
     </div>
   </section>
 
-  <!-- 7. Llamada final para propietarios -->
-  <section class="h-cta">
-    <div class="contenedor h-cta-dentro aparecer">
-      <div>
+  <!-- 7. ¿Cuánto vale tu casa? (propietarios) -->
+  <section class="h-valor" id="valorar">
+    <div class="contenedor h-valor-dentro">
+      <div class="h-valor-texto aparecer">
+        <p class="h-eyebrow">Para propietarios</p>
         <h2>¿Cuánto vale tu casa?</h2>
-        <p>Responde unas preguntas en 3 minutos y te enviamos una valoración profesional, gratis y sin compromiso.</p>
+        <p>Responde unas preguntas en 3 minutos y recibe en tu email una valoración orientativa, gratis y sin compromiso.</p>
+        <ul class="hv-ventajas">
+          <li><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm1 5h-2v6l5 3 1-1.7-4-2.3z"/></svg>3 minutos</li>
+          <li><svg viewBox="0 0 24 24"><path d="m9 16.2-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/></svg>Gratis</li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5z"/></svg>Sin compromiso</li>
+        </ul>
+        <div class="h-cta-botones">
+          <a class="boton claro" href="valorar.html">Valorar mi casa gratis</a>
+          <a class="boton h-boton-wa" id="cta-wa" href="#" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+        </div>
       </div>
-      <div class="h-cta-botones">
-        <a class="boton claro" href="valorar.html">Valorar mi casa gratis</a>
-        <a class="boton h-boton-wa" id="cta-wa" href="#" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+      <div class="hv-tarjeta aparecer" aria-hidden="true">
+        <div class="hv-cab"><span class="hv-vivo"></span>Valoración orientativa</div>
+        <div class="hv-casa" id="hv-casa">Casa · Los Molinos · 180 m²</div>
+        <div class="hv-precio"><span id="hv-min">360.000</span><span class="hv-guion">–</span><span id="hv-max">420.000</span><small>€</small></div>
+        <div class="hv-barra"><span id="hv-barra"></span></div>
+        <div class="hv-datos">
+          <div><small>Precio medio</small><b id="hv-m2">2.126 €/m²</b></div>
+          <div><small>Municipio</small><b id="hv-mun">Los Molinos</b></div>
+        </div>
+        <p class="hv-nota">Ejemplo con precios medios de la zona</p>
       </div>
     </div>
+    <div class="hv-cinta" aria-hidden="true"><div class="hv-pista" id="hv-pista"></div></div>
   </section>
 </main>
 
@@ -199,6 +217,9 @@ listo.then(() => {
   else document.getElementById("testimonios").innerHTML = TESTIMONIOS.map((t) =>
     `<figure class="h-opinion aparecer"><blockquote>“${esc(t.texto)}”</blockquote><figcaption>${esc(t.autor)}</figcaption></figure>`).join("");
 
+  /* ¿Cuánto vale tu casa? — ejemplos animados con los precios medios de la zona */
+  valorAnimado();
+
   /* WhatsApp para propietarios */
   document.getElementById("cta-wa").href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola, tengo una vivienda y me gustaría venderla o alquilarla con Evolv Real Estate.")}`;
 
@@ -206,6 +227,53 @@ listo.then(() => {
 });
 
 /* Carrusel (diapositivas) de casas destacadas */
+function valorAnimado() {
+  const V = CONFIG.valoracion || {};
+  const munis = (V.municipios || []).filter((m) => m && m.nombre && (m.piso || m.casa));
+  const sec = document.getElementById("valorar");
+  if (!sec || !munis.length) { const t = sec && sec.querySelector(".hv-tarjeta"); if (t) t.remove(); sec && sec.querySelector(".hv-cinta")?.remove(); return; }
+  const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const quieto = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Cinta con el precio medio por m² de cada municipio
+  const item = (m) => `<span class="hv-item"><b>${esc(m.nombre)}</b><span>Casas ${fmt(m.casa || m.piso)} €/m²</span><span>Pisos ${fmt(m.piso || m.casa)} €/m²</span></span>`;
+  const items = munis.map(item).join("");
+  document.getElementById("hv-pista").innerHTML = items + items;
+
+  // Tarjeta: ejemplos que van cambiando
+  const tipos = [
+    { t: "Casa", k: "casa", m2: 180, f: 1 }, { t: "Piso", k: "piso", m2: 90, f: 1 },
+    { t: "Chalet independiente", k: "casa", m2: 240, f: 1.05 }, { t: "Ático", k: "piso", m2: 110, f: 1.08 },
+    { t: "Adosado", k: "casa", m2: 150, f: 0.95 },
+  ];
+  const margen = (Number(V.margen) || 8) / 100;
+  const r5 = (n) => Math.round(n / 5000) * 5000;
+  const el = (id) => document.getElementById(id);
+  let i = 0, actual = { min: 0, max: 0 };
+  const contar = (a, b, fn) => {
+    if (quieto) return fn(b);
+    const t0 = performance.now(), d = 900;
+    const paso = (t) => { const k = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - k, 3); fn(a + (b - a) * e); if (k < 1) requestAnimationFrame(paso); };
+    requestAnimationFrame(paso);
+  };
+  const mostrar = () => {
+    const m = munis[i % munis.length], tp = tipos[i % tipos.length];
+    const eur = (m[tp.k] || m.casa || m.piso) * tp.f;
+    const base = eur * tp.m2, min = r5(base * (1 - margen)), max = r5(base * (1 + margen));
+    el("hv-casa").textContent = `${tp.t} · ${m.nombre} · ${tp.m2} m²`;
+    el("hv-mun").textContent = m.nombre;
+    el("hv-m2").textContent = `${fmt(m[tp.k] || m.casa || m.piso)} €/m²`;
+    const de = { ...actual };
+    contar(de.min, min, (v) => (el("hv-min").textContent = fmt(r5(v))));
+    contar(de.max, max, (v) => (el("hv-max").textContent = fmt(r5(v))));
+    el("hv-barra").style.width = Math.max(18, Math.min(100, (max / 900000) * 100)) + "%";
+    actual = { min, max };
+    i++;
+  };
+  mostrar();
+  if (!quieto) setInterval(() => { if (document.visibilityState === "visible") mostrar(); }, 3600);
+}
+
 function carrusel(caja, puntos) {
   const pista = caja.querySelector(".h-pista");
   const prev = caja.querySelector(".prev"), next = caja.querySelector(".next");

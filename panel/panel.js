@@ -247,7 +247,7 @@ function vInicio() {
     <a class="kpi ${nuevos ? "alerta" : ""}" href="#mensajes"><small>Mensajes sin atender</small><strong>${nuevos}</strong><span>${S.mensajes.length} en total</span></a>
     <a class="kpi" href="#visitas"><small>Visitas esta semana</small><strong>${semana}</strong><span>${fut.length} próximas</span></a>
     <a class="kpi ${pend ? "alerta" : ""}" href="#visitas"><small>Por confirmar</small><strong>${pend}</strong><span>visitas pendientes</span></a>
-    <a class="kpi" href="#casas"><small>Casas publicadas</small><strong>${pubV + pubA}</strong><span>${pubV} venta · ${pubA} alquiler</span></a>
+    <a class="kpi" href="#casas"><small>Casas activas en la web</small><strong>${pubV + pubA}</strong><span>${pubV} venta · ${pubA} alquiler</span></a>
   </div>
   ${S.github ? "" : `<div class="aviso-info">Para crear y editar casas desde aquí, conecta GitHub en <a href="#ajustes"><b>Ajustes</b></a>.</div>`}
   <div class="rejilla2">
@@ -496,12 +496,19 @@ function vCasas() {
   const q = S.buscaCasa.toLowerCase();
   const filtradas = lista.map((p, i) => ({ p, i })).filter(({ p }) => !q || `${p.nombre} ${p.zona} ${p.estado}`.toLowerCase().includes(q));
   const ed = S.casasEditables;
+  const activas = lista.filter((p) => p.visible !== false).length;
   return `
   ${ed ? "" : `<div class="aviso-info amarillo">Estás viendo las casas publicadas. Para crear, editar y subir fotos desde aquí, conecta GitHub en <a href="#ajustes"><b>Ajustes</b></a>.</div>`}
   <div class="filtros">
     <button class="filtro ${S.tab === "venta" ? "activo" : ""}" data-acc="tabCasas" data-t="venta">En venta (${S.venta.length})</button>
     <button class="filtro ${S.tab === "alquiler" ? "activo" : ""}" data-acc="tabCasas" data-t="alquiler">En alquiler (${S.alquiler.length})</button>
     <input type="search" id="busca-casa" placeholder="Buscar casa…" value="${esc(S.buscaCasa)}">
+  </div>
+  <div class="casas-resumen">
+    <span><b>${activas}</b> activas en la web · <b>${lista.length - activas}</b> desactivadas</span>
+    ${ed && lista.length ? `<span class="acciones">
+      ${activas < lista.length ? `<button class="btn peq" data-acc="todasCasas" data-v="1">Activar todas</button>` : ""}
+      ${activas ? `<button class="btn peq" data-acc="todasCasas" data-v="0">Desactivar todas</button>` : ""}</span>` : ""}
   </div>
   <div class="casas-rejilla">
     ${ed ? `<div class="casa nueva-casa" data-acc="nuevaCasa">+ Añadir casa</div>` : ""}
@@ -511,10 +518,15 @@ function vCasas() {
           <span class="chip ${clase(p.estado || "Disponible")}">${esc(p.estado || "Disponible")}</span>
           ${p.destacada ? '<span class="destacada-marca" title="Destacada en la portada">★ Destacada</span>' : ""}
           ${(p.galeria || []).length ? `<span class="n-fotos">${(p.galeria || []).length + 1} fotos</span>` : ""}
-          ${p.visible === false ? '<div class="oculta-marca">Oculta en la web</div>' : ""}</div>
+          ${p.visible === false ? '<div class="oculta-marca"><span>Desactivada</span><small>No se ve en la web</small></div>' : ""}</div>
         <div class="info"><h3>${esc(p.nombre)}</h3><div class="zona">${esc(p.zona)}</div>
           <div class="linea"><span class="precio">${euros(p.precio)}${S.tab === "alquiler" ? "<small>/mes</small>" : ""}</span>
           </div>${datosCasa(p)}</div>
+        ${ed ? `<div class="casa-acc">
+          <button class="btn peq ${p.visible === false ? "verde" : ""}" data-acc="toggleCasa" data-i="${i}">${p.visible === false ? "Activar" : "Desactivar"}</button>
+          <button class="btn peq" data-acc="editarCasa" data-i="${i}">Editar</button>
+          <button class="btn peq rojo" data-acc="eliminarCasa" data-i="${i}">Eliminar</button>
+        </div>` : ""}
       </div>`).join("")}
   </div>`;
 }
@@ -544,7 +556,7 @@ function pintarModalCasa() {
         <div><label>Metros cuadrados</label><input type="number" id="c-m2" value="${p.m2 ?? ""}" min="0"></div>
         <div><label>Ubicación para el mapa</label><input type="text" id="c-ubic" value="${esc(p.ubicacion || "")}" placeholder="Calle o pueblo (opcional)"></div>
         <div class="completo"><label>Descripción</label><textarea id="c-desc" placeholder="Cuenta lo mejor de la casa. Cada párrafo en una línea.">${esc(p.descripcion || "")}</textarea></div>
-        <div class="completo"><label class="interruptor"><input type="checkbox" id="c-visible" ${p.visible !== false ? "checked" : ""}> Mostrar en la web</label></div>
+        <div class="completo"><label class="interruptor"><input type="checkbox" id="c-visible" ${p.visible !== false ? "checked" : ""}> Anuncio activo (se ve en la web)</label></div>
         <div class="completo"><label class="interruptor"><input type="checkbox" id="c-destacada" ${p.destacada ? "checked" : ""}> ★ Destacar en la portada</label>
           <small class="ayuda">Las casas destacadas salen en el carrusel de la página principal. Si no destacas ninguna, salen todas.</small></div>
         <div class="completo"><label>Fotos (la primera es la principal)</label>
@@ -820,6 +832,33 @@ const ACC = {
 
   /* Casas */
   tabCasas: (b) => { S.tab = b.dataset.t; pintar(); },
+  toggleCasa: (b) => conBoton(b, async () => {
+    const tipo = S.tab, lista = JSON.parse(JSON.stringify(tipo === "venta" ? S.venta : S.alquiler));
+    const c = lista[Number(b.dataset.i)];
+    c.visible = c.visible === false;
+    await guardarListaCasas(tipo, lista, (c.visible ? "activar " : "desactivar ") + c.nombre);
+    pintar(); toast(c.visible ? `«${c.nombre}» activada ✓ Se verá en la web en 1-2 minutos` : `«${c.nombre}» desactivada ✓ Deja de verse en 1-2 minutos`, "ok");
+  }).catch((e) => toast(e.message, "error")),
+  eliminarCasa: async (b) => {
+    const tipo = S.tab, lista = [...(tipo === "venta" ? S.venta : S.alquiler)];
+    const i = Number(b.dataset.i), c = lista[i];
+    if (!(await confirmar(`Se eliminará <b>${esc(c.nombre)}</b> (${esc(c.zona)}) del panel y de la web. No se puede deshacer.<br><br>Si solo quieres que no se vea, mejor <b>desactívala</b>.`, "Eliminar", true))) return;
+    try {
+      lista.splice(i, 1);
+      await guardarListaCasas(tipo, lista, "eliminar " + c.nombre);
+      pintar(); toast("Casa eliminada");
+    } catch (e) { toast(e.message, "error"); }
+  },
+  todasCasas: async (b) => {
+    const tipo = S.tab, activar = b.dataset.v === "1";
+    const lista = JSON.parse(JSON.stringify(tipo === "venta" ? S.venta : S.alquiler));
+    if (!(await confirmar(`Se ${activar ? "activarán" : "desactivarán"} las <b>${lista.length}</b> casas en ${tipo}. ${activar ? "Todas se verán en la web." : "Ninguna se verá en la web, pero no se borra nada."}`, activar ? "Activar todas" : "Desactivar todas"))) return;
+    try {
+      lista.forEach((c) => { c.visible = activar; });
+      await guardarListaCasas(tipo, lista, (activar ? "activar" : "desactivar") + " todas las casas en " + tipo);
+      pintar(); toast(activar ? "Todas activadas ✓" : "Todas desactivadas ✓", "ok");
+    } catch (e) { toast(e.message, "error"); }
+  },
   editarCasa: (b) => modalCasa(S.tab, Number(b.dataset.i)),
   fotoMover: (b) => { leerFormCasa(); const k = Number(b.dataset.k), d = Number(b.dataset.d); const f = EDIT.fotos; [f[k], f[k + d]] = [f[k + d], f[k]]; pintarModalCasa(); },
   fotoPrincipal: (b) => { leerFormCasa(); const k = Number(b.dataset.k); EDIT.fotos.unshift(EDIT.fotos.splice(k, 1)[0]); pintarModalCasa(); },
@@ -839,7 +878,7 @@ const ACC = {
   }).catch((e) => toast(e.message, "error")),
   borrarCasa: async () => {
     const { tipo, i, casa } = EDIT;
-    if (!(await confirmar(`Se eliminará <b>${esc(casa.nombre)}</b> de la web. Si solo quieres esconderla, desmarca «Mostrar en la web».`, "Eliminar", true))) return;
+    if (!(await confirmar(`Se eliminará <b>${esc(casa.nombre)}</b> de la web. Si solo quieres esconderla, desactívala.`, "Eliminar", true))) return;
     try {
       const lista = [...(tipo === "venta" ? S.venta : S.alquiler)];
       lista.splice(i, 1);
