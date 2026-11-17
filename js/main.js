@@ -11,21 +11,23 @@ const ICONOS = {
 
 /* ---------- Cabecera ---------- */
 function pintarCabecera() {
-  const actual = location.pathname.split("/").pop() || "index.html";
+  const ruta = location.pathname.replace(/\.html$/, "");
+  const actual = ruta.startsWith("/venta/") ? "/comprar" : ruta.startsWith("/alquiler/") ? "/alquilar" : ruta.startsWith("/blog") ? "/blog" : ruta;
   const enlaces = [
-    ["comprar.html", "Comprar"],
-    ["alquilar.html", "Alquilar"],
-    ["vender.html", "Vender"],
-    ["valorar.html", "Valorar mi casa"],
+    ["/comprar", "Comprar"],
+    ["/alquilar", "Alquilar"],
+    ["/vender", "Vender"],
+    ["/valorar", "Valorar mi casa"],
+    ["/blog", "Blog"],
   ];
   const html = `
   <header class="cabecera">
     <div class="contenedor">
-      <a href="index.html" class="logo" aria-label="Evolv Real Estate, inicio"><svg class="logo-svg" viewBox="0 0 668 190" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M366.5 120.2 365.0 122.5 365.0 145.2 365.5 146.2 367.8 147.8 386.5 147.8 388.0 147.0 389.5 144.5 389.5 123.0 388.8 121.2 386.5 119.8 367.8 119.8ZM509.8 51.8 513.0 61.8 561.0 188.2 561.5 188.8 615.5 188.8 666.8 54.8 667.8 53.5 667.8 51.5 617.2 51.8 592.8 135.2 592.0 136.8 591.0 137.2 590.0 136.8 564.8 51.8ZM303.9 116.4a73.4 73.4 0 1 0 146.8 0a73.4 73.4 0 1 0 -146.8 0ZM374.5 69.0 379.2 68.8 381.2 69.8 421.0 109.5 421.8 111.2 422.0 114.5 421.5 116.2 419.0 119.2 416.0 120.5 412.2 120.5 412.0 150.8 410.2 154.0 405.5 157.8 403.2 158.2 351.0 158.2 347.2 157.0 344.0 154.0 343.0 152.2 342.0 148.2 342.0 120.2 337.5 120.2 333.8 117.8 332.2 114.8 332.8 110.5 371.8 71.0ZM0.0 10.0 0.0 188.8 156.0 188.8 156.5 188.0 156.2 146.2 57.8 146.0 57.0 145.2 57.0 119.5 58.5 118.5 139.2 118.8 140.5 118.0 140.2 77.8 57.8 77.5 57.0 76.2 57.0 53.5 57.8 52.8 153.2 53.0 204.8 188.5 258.8 188.8 259.5 188.2 309.8 57.0 311.2 51.8 261.2 51.5 260.5 52.2 236.0 136.0 235.2 137.0 234.0 137.0 233.2 136.2 208.8 52.2 207.5 51.5 155.2 51.5 154.5 50.5 154.2 10.0ZM456.0 0.0 455.8 188.5 507.0 188.8 507.5 188.2 507.5 1.5 507.0 0.0Z"/></svg><span>Real Estate</span></a>
+      <a href="/" class="logo" aria-label="Evolv Real Estate, inicio"><svg class="logo-svg" viewBox="0 0 668 190" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M366.5 120.2 365.0 122.5 365.0 145.2 365.5 146.2 367.8 147.8 386.5 147.8 388.0 147.0 389.5 144.5 389.5 123.0 388.8 121.2 386.5 119.8 367.8 119.8ZM509.8 51.8 513.0 61.8 561.0 188.2 561.5 188.8 615.5 188.8 666.8 54.8 667.8 53.5 667.8 51.5 617.2 51.8 592.8 135.2 592.0 136.8 591.0 137.2 590.0 136.8 564.8 51.8ZM303.9 116.4a73.4 73.4 0 1 0 146.8 0a73.4 73.4 0 1 0 -146.8 0ZM374.5 69.0 379.2 68.8 381.2 69.8 421.0 109.5 421.8 111.2 422.0 114.5 421.5 116.2 419.0 119.2 416.0 120.5 412.2 120.5 412.0 150.8 410.2 154.0 405.5 157.8 403.2 158.2 351.0 158.2 347.2 157.0 344.0 154.0 343.0 152.2 342.0 148.2 342.0 120.2 337.5 120.2 333.8 117.8 332.2 114.8 332.8 110.5 371.8 71.0ZM0.0 10.0 0.0 188.8 156.0 188.8 156.5 188.0 156.2 146.2 57.8 146.0 57.0 145.2 57.0 119.5 58.5 118.5 139.2 118.8 140.5 118.0 140.2 77.8 57.8 77.5 57.0 76.2 57.0 53.5 57.8 52.8 153.2 53.0 204.8 188.5 258.8 188.8 259.5 188.2 309.8 57.0 311.2 51.8 261.2 51.5 260.5 52.2 236.0 136.0 235.2 137.0 234.0 137.0 233.2 136.2 208.8 52.2 207.5 51.5 155.2 51.5 154.5 50.5 154.2 10.0ZM456.0 0.0 455.8 188.5 507.0 188.8 507.5 188.2 507.5 1.5 507.0 0.0Z"/></svg><span>Real Estate</span></a>
       <button class="hamburguesa" aria-label="Abrir menú"><span></span><span></span><span></span></button>
       <ul class="menu">
-        ${enlaces.map(([h, t]) => `<li><a href="${h}" class="${actual.startsWith(h.replace(".html","")) ? "activo" : ""}">${t}</a></li>`).join("")}
-        <li><a href="reservar.html" class="boton">Reservar visita</a></li>
+        ${enlaces.map(([h, t]) => `<li><a href="${h}" class="${actual === h ? "activo" : ""}">${t}</a></li>`).join("")}
+        <li><a href="/reservar" class="boton">Reservar visita</a></li>
       </ul>
     </div>
   </header>`;
@@ -48,14 +50,15 @@ function pintarPie() {
         <div>
           <h4>Enlaces</h4>
           <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="comprar.html">Comprar</a></li>
-            <li><a href="alquilar.html">Alquilar</a></li>
-            <li><a href="vender.html">Vender</a></li>
-            <li><a href="valorar.html">Valorar mi casa</a></li>
-            <li><a href="reservar.html">Reserva online</a></li>
-            <li><a href="privacidad.html">Política de Privacidad</a></li>
-            <li><a href="aviso-legal.html">Aviso legal</a></li>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/comprar">Comprar</a></li>
+            <li><a href="/alquilar">Alquilar</a></li>
+            <li><a href="/vender">Vender</a></li>
+            <li><a href="/valorar">Valorar mi casa</a></li>
+            <li><a href="/reservar">Reserva online</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/privacidad">Política de Privacidad</a></li>
+            <li><a href="/aviso-legal">Aviso legal</a></li>
           </ul>
         </div>
         <div>
@@ -76,12 +79,12 @@ function pintarPie() {
             <div><label for="p-email">Email</label><input id="p-email" type="email" name="email" required></div>
             <div><label for="p-tel">Teléfono</label><input id="p-tel" type="tel" name="Teléfono"></div>
             <div class="completo"><label for="p-msg">Mensaje</label><textarea id="p-msg" name="Mensaje" placeholder="Escribe tu mensaje aquí" required></textarea></div>
-            <p class="legal completo"><label style="display:flex;gap:.5rem;font-weight:400"><input type="checkbox" required style="width:auto"> He leído y acepto la <a href="privacidad.html">política de privacidad</a>.</label></p>
+            <p class="legal completo"><label style="display:flex;gap:.5rem;font-weight:400"><input type="checkbox" required style="width:auto"> He leído y acepto la <a href="/privacidad">política de privacidad</a>.</label></p>
             <button class="boton claro" type="submit">Enviar</button>
           </form>
         </div>
       </div>
-      <div class="pie-zonas"><span>Zonas:</span> ${ZONAS.map(([s, n]) => `<a href="inmobiliaria-${s}.html">${n}</a>`).join("")}</div>
+      <div class="pie-zonas"><span>Zonas:</span> ${ZONAS.map(([s, n]) => `<a href="/inmobiliaria-${s}">${n}</a>`).join("")}</div>
       <div class="copy"><span>© ${new Date().getFullYear()} ${CONFIG.nombre}</span><span>Agencia inmobiliaria en la Sierra de Madrid</span></div>
     </div>
   </footer>
@@ -110,7 +113,7 @@ function pintarZona() {
     <p>Cuéntanos qué buscas en ${esc(muni)} y te avisamos en cuanto tengamos algo que encaje contigo. Si tienes una casa aquí, también te ayudamos a venderla o alquilarla.</p>
     <div class="acciones">
       <a class="boton" href="${wa}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
-      <a class="boton borde" href="valorar.html">Valorar mi casa gratis</a>
+      <a class="boton borde" href="/valorar">Valorar mi casa gratis</a>
     </div></div>`;
 }
 
@@ -135,7 +138,7 @@ function datosCasa(p, clase = "tc-datos") {
   return d.length ? `<ul class="${clase}">${d.join("")}</ul>` : "";
 }
 function tarjetaCasa(p, alq, anim = true) {
-  const url = `casa.html?tipo=${p.tipo}&id=${p.id}`;
+  const url = `/${p.tipo}/${p.id}`;
   const n = (p.fotos || []).length;
   return `<article class="tarjeta tc${anim ? " aparecer" : ""}">
     <div class="tc-foto">
@@ -163,7 +166,7 @@ function pintarListado(lista, contenedorId, esAlquiler = false) {
       <p>Ahora mismo no hay viviendas en ${esAlquiler ? "alquiler" : "venta"} publicadas. Cuéntanos qué buscas y te avisamos en cuanto tengamos algo que encaje contigo.</p>
       <div class="acciones">
         <a class="boton" href="${wa}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
-        <a class="boton borde" href="valorar.html">¿Tienes una casa? Valórala gratis</a>
+        <a class="boton borde" href="/valorar">¿Tienes una casa? Valórala gratis</a>
       </div></div>`;
     return;
   }
