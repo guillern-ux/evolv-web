@@ -35,7 +35,7 @@
     "m2": 590,
     "precio": 7500,
     "img": "/img/centro-colon.jpg",
-    "visible": true,
+    "visible": false,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
