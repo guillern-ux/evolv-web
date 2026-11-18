@@ -142,7 +142,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
         <h1>¿Cuánto vale tu casa?</h1>
         <p class="v-lead">Responde unas preguntas sobre tu vivienda y recibe al momento una valoración orientativa en tu email. Si quieres afinarla, la revisamos contigo sin compromiso.</p>
         <form class="v-buscar" id="v-inicio">
-          <input id="v-dir-inicio" type="text" placeholder="Dirección o pueblo de tu vivienda" autocomplete="street-address" aria-label="Dirección de tu vivienda">
+          <input id="v-dir-inicio" type="text" data-direccion placeholder="Dirección o pueblo de tu vivienda" autocomplete="street-address" aria-label="Dirección de tu vivienda">
           <button class="boton" type="submit">Valorar mi casa</button>
         </form>
         <ul class="v-checks">
@@ -214,6 +214,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
 
 <script src="/js/datos.js?v=3"></script>
 <script src="/js/main.js?v=5"></script>
+<script src="/js/direcciones.js"></script>
 <script>
 (() => {
   const ICON = {
@@ -240,7 +241,7 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
   const PASOS = [
     { id: "dir", titulo: "¿Dónde está tu vivienda?", ayuda: "La ubicación es lo que más influye en el precio.",
       html: () => `
-        <div class="v-campo"><label for="f-dir">Dirección</label><input id="f-dir" type="text" autocomplete="street-address" placeholder="Calle y número" value="${esc(D.dir || "")}"></div>
+        <div class="v-campo"><label for="f-dir">Dirección</label><input id="f-dir" type="text" data-direccion="calle" autocomplete="street-address" placeholder="Calle y número" value="${esc(D.dir || "")}"></div>
         <div class="v-campo"><label for="f-mun">Municipio</label><select id="f-mun"><option value="">Elige tu municipio</option>${municipios().map((m) => `<option ${m === D.mun ? "selected" : ""}>${m}</option>`).join("")}</select></div>`,
       leer: () => { D.dir = val("#f-dir"); D.mun = val("#f-mun"); },
       ok: () => D.dir && D.mun },
@@ -353,7 +354,20 @@ body.v-modo .pie, body.v-modo .whatsapp { display: none; }
   $("#v-panel").addEventListener("change", actualizarBoton);
   $("#v-panel").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") { e.preventDefault(); avanzar(); } });
   $("#v-atras").addEventListener("click", atras);
-  $("#v-inicio").addEventListener("submit", (e) => { e.preventDefault(); entrar(val("#v-dir-inicio")); });
+  /* Sugerencias de direcciones: al elegir una, se rellena también el municipio */
+  const norm = (t) => String(t || "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().trim();
+  const munDe = (o) => (o.municipio ? municipios().find((m) => norm(m) === norm(o.municipio)) || "Otro" : "");
+  let inicio = null;
+  document.addEventListener("direccion", (e) => {
+    const o = e.detail, m = munDe(o);
+    if (e.target.id === "v-dir-inicio") { inicio = { texto: e.target.value, calle: o.calle ? o.calle + (o.numero ? ", " + o.numero : "") : "" }; if (m) D.mun = m; }
+    if (e.target.id === "f-dir" && m) { const s = $("#f-mun"); s.value = m; s.dispatchEvent(new Event("change", { bubbles: true })); }
+  });
+  $("#v-inicio").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const t = val("#v-dir-inicio");
+    entrar(inicio && inicio.texto === t ? inicio.calle : t);
+  });
   $("#v-empezar-2").addEventListener("click", () => entrar());
 
   /* Valoración orientativa: precio medio por m² del municipio (editable en el panel) ajustado por tipo, estado, tamaño y extras.
