@@ -560,7 +560,7 @@ function pintarModalCasa() {
         <div><label>Habitaciones</label><input type="number" id="c-hab" value="${p.hab ?? ""}" min="0"></div>
         <div><label>Baños</label><input type="number" id="c-banos" value="${p.banos ?? ""}" min="0"></div>
         <div><label>Metros cuadrados</label><input type="number" id="c-m2" value="${p.m2 ?? ""}" min="0"></div>
-        <div><label>Ubicación para el mapa</label><input type="text" id="c-ubic" value="${esc(p.ubicacion || "")}" placeholder="Calle o pueblo (opcional)"></div>
+        <div><label>Ubicación para el mapa</label><input type="text" id="c-ubic" data-direccion value="${esc(p.ubicacion || "")}" placeholder="Calle o pueblo (opcional)"></div>
         <div class="completo"><label>Descripción</label><textarea id="c-desc" placeholder="Cuenta lo mejor de la casa. Cada párrafo en una línea.">${esc(p.descripcion || "")}</textarea></div>
         <div class="completo"><label class="interruptor"><input type="checkbox" id="c-visible" ${p.visible !== false ? "checked" : ""}> Anuncio activo (se ve en la web)</label></div>
         <div class="completo"><label class="interruptor"><input type="checkbox" id="c-destacada" ${p.destacada ? "checked" : ""}> ★ Destacar en la portada</label>
