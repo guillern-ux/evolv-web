@@ -416,20 +416,13 @@ a { color: inherit; }
 .hv-datos small { display: block; color: rgba(255,255,255,.6); font-size: .8rem; }
 .hv-datos b { font-size: 1.05rem; }
 .hv-nota { margin-top: 1rem; font-size: .78rem; color: rgba(255,255,255,.5); }
-.hv-cinta { border-top: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); overflow: hidden; white-space: nowrap; }
-.hv-pista { display: inline-flex; animation: hv-correr 45s linear infinite; }
-.hv-cinta:hover .hv-pista { animation-play-state: paused; }
-.hv-item { display: inline-flex; align-items: center; gap: .9rem; padding: 1rem 2rem; font-size: .92rem; color: var(--lavanda); border-right: 1px solid rgba(255,255,255,.1); }
-.hv-item b { color: #fff; }
-@keyframes hv-correr { to { transform: translateX(-50%); } }
 @media (max-width: 900px) {
   .h-valor { padding-top: 3.5rem; }
   .h-valor-dentro { grid-template-columns: 1fr; gap: 2.2rem; padding-bottom: 3rem; }
   .h-valor .h-cta-botones .boton { width: 100%; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hv-pista, .hv-vivo { animation: none; }
-  .hv-cinta { overflow-x: auto; }
+  .hv-vivo { animation: none; }
 }
 
 /* Sin casas publicadas */
