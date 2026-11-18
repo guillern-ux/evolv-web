@@ -259,7 +259,6 @@
         <p class="hv-nota">Ejemplo con precios medios de la zona</p>
       </div>
     </div>
-    <div class="hv-cinta" aria-hidden="true"><div class="hv-pista" id="hv-pista"></div></div>
   </section>
 </main>
 
@@ -330,14 +329,9 @@ function valorAnimado() {
   const V = CONFIG.valoracion || {};
   const munis = (V.municipios || []).filter((m) => m && m.nombre && (m.piso || m.casa));
   const sec = document.getElementById("valorar");
-  if (!sec || !munis.length) { const t = sec && sec.querySelector(".hv-tarjeta"); if (t) t.remove(); sec && sec.querySelector(".hv-cinta")?.remove(); return; }
+  if (!sec || !munis.length) { const t = sec && sec.querySelector(".hv-tarjeta"); if (t) t.remove(); return; }
   const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   const quieto = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Cinta con el precio medio por m² de cada municipio
-  const item = (m) => `<span class="hv-item"><b>${esc(m.nombre)}</b><span>Casas ${fmt(m.casa || m.piso)} €/m²</span><span>Pisos ${fmt(m.piso || m.casa)} €/m²</span></span>`;
-  const items = munis.map(item).join("");
-  document.getElementById("hv-pista").innerHTML = items + items;
 
   // Tarjeta: ejemplos que van cambiando
   const tipos = [
