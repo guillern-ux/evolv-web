@@ -50,7 +50,7 @@
     "m2": 440,
     "precio": 3325500,
     "img": "/img/la-perla.jpg",
-    "visible": false,
+    "visible": true,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
