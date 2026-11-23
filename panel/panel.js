@@ -70,6 +70,9 @@ function casaDeMensaje(m) {
 const nombreInmueble = (m) => String(m.Inmueble || "").split(" · ")[0];
 /* Artículos del blog (foto por defecto si no se ha cambiado en Ajustes) */
 const BLOG = [
+  ["vivir-en-los-molinos", "Vivir en Los Molinos: guía para comprar casa", "/img/portada.jpg"],
+  ["comprar-casa-el-escorial-san-lorenzo", "Comprar casa en El Escorial o San Lorenzo", "/img/centro-colon.jpg"],
+  ["gastos-vender-casa", "Cuánto cuesta vender una casa", "/img/plaza-loreto.jpg"],
   ["precio-vivienda-sierra-de-madrid-2026", "Cuánto cuesta una casa en la Sierra de Madrid", "/img/comprar-vivienda.jpg"],
   ["impuestos-vender-casa", "Qué impuestos pagas al vender tu casa", "/img/la-perla.jpg"],
   ["preparar-casa-para-vender", "Cómo preparar tu casa para venderla", "/img/chalet-los-molinos.jpg"],
