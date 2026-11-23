@@ -6,6 +6,7 @@ const FIJAS = [
   "/inmobiliaria-alpedrete", "/inmobiliaria-moralzarzal", "/inmobiliaria-becerril-de-la-sierra", "/inmobiliaria-navacerrada",
   "/inmobiliaria-collado-villalba", "/inmobiliaria-el-escorial", "/inmobiliaria-san-lorenzo-de-el-escorial",
   "/blog", "/blog/precio-vivienda-sierra-de-madrid-2026", "/blog/impuestos-vender-casa", "/blog/preparar-casa-para-vender",
+  "/blog/vivir-en-los-molinos", "/blog/comprar-casa-el-escorial-san-lorenzo", "/blog/gastos-vender-casa",
   "/privacidad", "/aviso-legal",
 ];
 const slug = (t) => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
