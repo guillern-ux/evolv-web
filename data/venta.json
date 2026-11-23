@@ -64,7 +64,7 @@
     "m2": 450,
     "precio": 5555000,
     "img": "/img/centro-colon.jpg",
-    "visible": false,
+    "visible": true,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
