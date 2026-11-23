@@ -92,7 +92,7 @@
     "m2": 780,
     "precio": 3325500,
     "img": "/img/edificio-banquero.jpg",
-    "visible": true,
+    "visible": false,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
