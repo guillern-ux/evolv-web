@@ -63,7 +63,7 @@
     "m2": 610,
     "precio": 1890,
     "img": "/img/plaza-loreto.jpg",
-    "visible": true,
+    "visible": false,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
