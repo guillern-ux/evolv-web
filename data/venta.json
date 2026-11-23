@@ -78,7 +78,7 @@
     "m2": 800,
     "precio": 4450000,
     "img": "/img/edificio-sass.jpg",
-    "visible": false,
+    "visible": true,
     "estado": "Disponible",
     "descripcion": "",
     "galeria": [],
